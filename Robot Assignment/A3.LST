@@ -1,0 +1,525 @@
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     1
+
+
+MS-DOS MACRO ASSEMBLER A51 V4.6
+OBJECT MODULE PLACED IN A3.OBJ
+ASSEMBLER INVOKED BY:  A51 A3.A51
+
+
+LOC  OBJ            LINE     SOURCE
+
+                       1             ;------------------------------------------------------------------------------
+                       2             ;Name: a3.a51
+                       3             ;Description: Robot light-seeking program
+                       4             ;Programmer: Chris Carpio
+                       5             ;Language: 8051 ASM
+                       6             ;Date: December 1, 2007
+                       7             ;Edit: Too Many :(
+                       8             ;
+                       9             ;
+                      10             ;Modules used:
+                      11             ;  trilodef.asm
+                      12             ;
+                      13             ;Revision History:
+                      14             ;
+                      15             ;Public Routines:
+                      16             ;
+                      17             ;Public Variables:
+                      18             ;
+                      19             ;Public Constants:
+                      20             ;
+                      21             ;Private Routines:
+                      22             ;
+                      23             ;Private Variables:
+                      24             ;
+                      25             ;Private Constants:
+                      26             ;
+                      27             ;------------------------------------------------------------------------------
+                      28     
+                      29     
+                      30                     
+                     702             $ list
+                     703             
+                     704             
+  007C               705             temp    EQU     07CH                    ;used for temporary storage on where to jump
+                              to
+  007D               706             currComm        EQU     07DH            ;which key is currently pressed
+  007E               707             COLON EQU 07EH
+                     708             
+0023                 709             ORG     0023H                   ;Serial Port Interrupt
+0023 020102          710                     LJMP SEND
+                     711     
+                     712     
+                     713             CSEG    at      0100h   ;Start program above vectors.
+0100 8049            714                     sjmp start              ;but send PC over some interrupt functions
+                     715                     
+0102                 716             SEND:                           ;Checks to see if program tripped RI unintentionally
+                             
+0102 309803          717                     JNB RI, SERIAL  ;If not, send it to Serial which handles TI
+0105 C298            718                     CLR RI
+0107 32              719                     RETI
+                     720                     
+0108                 721             SERIAL:                 ;Processes and sends the next output to Serial Port
+                     722                                             ;In order and format: mm:ss:hh, counter 
+0108 C0E0            723             push ACC
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     2
+
+
+LOC  OBJ            LINE     SOURCE
+
+010A C0D0            724             push PSW
+010C 7407            725             mov A, #07H
+010E 1280BD          726             lcall utlgll
+0111 C299            727             CLR TI
+0113 F599            728             MOV SBUF, A
+0115 3099FD          729             JNB TI, $
+0118 12013D          730             CALL COLO
+011B C299            731             CLR TI
+011D 7420            732             MOV A, #20H
+011F F599            733             MOV SBUF, A
+0121 3099FD          734             JNB TI, $
+0124 C299            735             CLR TI
+0126 E57D            736             MOV A, currComm
+0128 F599            737             MOV SBUF, A
+012A 3099FD          738             JNB TI, $
+012D C299            739             CLR TI
+012F 740D            740             MOV A, #0DH
+0131 F599            741             MOV SBUF, A
+0133 3099FD          742             JNB TI, $
+0136 C299            743             CLR TI
+0138 D0D0            744             pop PSW
+013A D0E0            745             pop ACC
+013C 32              746             RETI
+                     747     
+013D C299            748             COLO: CLR TI                    ;Used for the many ASCII colons in serial output
+013F C0E0            749                     push ACC
+0141 E57E            750                     MOV A, COLON
+0143 F599            751                     MOV SBUF, A
+0145 3099FD          752                     JNB TI, $
+0148 D0E0            753                     pop ACC
+014A 22              754                     RET
+                     755     
+014B                 756             start:          
+014B 7598C0          757                     MOV SCON,       #0C0H   ;Baud Rate Clock at 9-bit UART, with enabling TI.
+014E 758920          758                     MOV TMOD,       #20H    ;Setting Timer 2 for baud rate
+0151 758DFD          759                     MOV TH1,        #0FDH   ;Init baud rate
+0154 D2AC            760                     SETB ES                         ;Enabling interrupts
+0156 D299            761                     SETB TI
+0158 D28E            762                     SETB TR1
+015A D2AF            763                     SETB EA
+015C 128264          764                     lcall   trmclr          ;Clear LCD.
+015F 128270          765                     lcall   trmpsi          ;Message on LCD.
+0162 00              766                     db      0                               ;Top line.
+0163 5472696C        767                     db              'Trilobot'
+0167 6F626F74  
+016B 00              768                     db      0
+016C 128270          769                     lcall   trmpsi          ;Message on LCD.
+016F 40              770                     db      40h                             ;Bottom line.
+0170 61332E61        771                     db              'a3.a51'
+0174 3531      
+0176 00              772                     db      0
+                     773                     
+0177 74FF            774                     mov A,  #0FFH           ;Enable all whiskers
+0179 1280A5          775                     lcall   utlgoa
+017C 7401            776                     mov     A,      #1                      ;Wait 1 sec
+017E 12803C          777                     lcall   utlwas
+0181 7441            778                     mov A,  #'A'                    ;init movement
+                     779                     
+                     780             
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     3
+
+
+LOC  OBJ            LINE     SOURCE
+
+                     781                     ;jump if movement is not complete, or if there's no new movement        
+                     782             
+                     783             ;start of detection loop
+0183 C0E0            784             loop:   push ACC                                                ;since whisker metho
+                             d uses A, protect it
+0185 128069          785                             lcall utlgw
+0188 7046            786                             jnz collision                                   ;if any of A is set,
+                              means whisker has been hit
+018A D0E0            787                             pop ACC
+                     788                             
+                     789             ;Detecting the end of a movement
+018C B4413F          790                             cjne    A, #'A', sameState
+                     791             
+                     792                     ;jumps if there's nothing in the stack
+018F 30003C          793             jnb             staflag, sameState
+                     794             
+                     795                     ;if there's something in the stack and movement is complete, deal with it
+0192 D07C            796             stack:  pop     temp
+0194 E57C            797                             mov A,  temp
+                     798                     
+0196 B43805          799             for8:   cjne    A, #'8', back2          ;input 8 makes the robot go forward 3 inches
+                             
+0199 1201E5          800                             call    mov8                            ;push the location of comman
+                             d unto the stack
+                     801                             ;setb   staflag
+019C 8042            802                             sjmp    doneMove
+019E B43205          803             back2: cjne A, #'2', left4
+01A1 1201EB          804                             call    mov2
+                     805                             ;setb   staflag
+01A4 803A            806                             sjmp    doneMove
+01A6 B43405          807             left4: cjne A, #'4', right6
+01A9 1201F1          808                             call    mov4
+                     809                             ;setb   staflag
+01AC 8032            810                             sjmp    doneMove
+01AE B43605          811             right6: cjne A, #'6', left7
+01B1 1201F7          812                             call    mov6
+                     813                             ;setb   staflag
+01B4 802A            814                             sjmp    doneMove
+01B6 B43705          815             left7: cjne A, #'7', right9
+01B9 1201FD          816                             call    mov7
+                     817                             ;setb   staflag
+01BC 8022            818                             sjmp    doneMove
+01BE B43905          819             right9: cjne A, #'9', stopall
+01C1 120203          820                             call    mov9
+                     821                             ;setb   staflag
+01C4 801A            822                             sjmp    doneMove
+01C6 B4354C          823             stopall: cjne A, #'5', undef
+01C9 120209          824                             call    stop
+                     825                             ;setb   staflag
+01CC 8012            826                             sjmp    doneMove
+                     827             
+                     828                     ;Had to set this up because jumps were becoming out of range
+01CE 4127            829             sameState: ajmp keyboard
+                     830                     
+                     831                     ;invoked when a whisker is tweaked, overrides all move functions
+01D0 F4              832             collision:      CPL A                   ;to invert which whiskers have been hit
+01D1 1280A5          833                                     lcall   utlgoa  ;so that only whiskers that haven't been hit
+                              are enabled
+01D4 7432            834                                     mov A,  #'2'    ;emulating a '2' press on the keypad
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     4
+
+
+LOC  OBJ            LINE     SOURCE
+
+01D6 12020F          835                                     call    move    ;doing the move
+01D9 74FF            836                                     mov A,  #0FFH   ;Hopefully obstacle is clear, enable all whi
+                             skers again
+01DB 1280A5          837                                     lcall   utlgoa  
+01DE 80A3            838                                     sjmp    loop    ;back to detect more collisions
+                     839                                     
+                     840                     ;Robot initializes move, go back to detecting keyboard input
+01E0 C200            841             doneMove:       clr staflag
+01E2 E4              842                             clr A                   ;So that A may be set by the robot again
+01E3 8042            843                             sjmp keyboard
+                     844                                     
+                     845                                     
+                     846                     ;These locations are called when popped off the stack
+                     847                     ;They contain specific distance values that are used with
+                     848                     ;moving or rotating the robot. They call on other, more general methods
+                     849                     ;to actually move it.
+01E5 7440            850             mov8:   mov A, #40H
+01E7 12020F          851                             call move
+01EA 22              852                             ret
+01EB 7460            853             mov2:   mov A, #60H
+01ED 12020F          854                             call move
+01F0 22              855                             ret
+01F1 7406            856             mov4:   mov A, #06H
+01F3 12020F          857                             call move
+01F6 22              858                             ret
+01F7 7426            859             mov6:   mov A, #26H
+01F9 12020F          860                             call move
+01FC 22              861                             ret
+01FD 7402            862             mov7:   mov A, #02H
+01FF 12020F          863                             call move
+0202 22              864                             ret
+0203 7422            865             mov9:   mov A, #22H
+0205 12020F          866                             call move
+0208 22              867                             ret
+0209 74FF            868             stop:   mov     A, #0FFH        ;otherwise stop
+020B 12020F          869                             call move
+020E 22              870                             ret
+                     871                             
+                     872             ;General move method
+020F 1280B7          873             move:   lcall   utlgoc
+0212 F57D            874                             mov currComm, A         ;Displaying the current keypress
+0214 22              875                             ret
+                     876             
+                     877                     ;If program is here, it means something went boom
+0215 128264          878             undef:  lcall   trmclr          ;Clear LCD.
+0218 128270          879                             lcall   trmpsi          ;Message on LCD.
+021B 00              880                             db      0                       ;Top line.
+021C 4920474F        881                             db      'I GO BOOM'
+0220 20424F4F  
+0224 4D        
+0225 00              882                             db      0
+0226 22              883                             ret
+                     884     
+                     885     
+                     886             
+                     887             
+0227 12803C          888             keyboard: lcall utlwas    
+022A 1280F6          889                     lcall   sioget          
+022D 1280F9          890                     lcall   sioput                          ;get command and echo 
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     5
+
+
+LOC  OBJ            LINE     SOURCE
+
+0230 B43007          891                     cjne    A, #'0', back                   ;if no input, go back to repitition 
+                             loop
+                     892                     
+                     893                     ;If program gets to this line, means that there was keyboard input
+                     894                     ;Need to detect input, and push value to stack
+0233 D200            895                     setb    staflag
+0235 C0E0            896                     push    ACC
+0237 E4              897                     CLR     A
+0238 413A            898                     ajmp    back
+                     899                     
+                     900                     ;Had to set this up since jumps were becomng out of range
+023A F57D            901             back:   mov currComm, A
+023C 2183            902                     ajmp loop
+                     903                             
+                     904     
+                     905             
+                     906     
+                     907             
+                     908                     BSEG                                    ;Area for the bit flags used in proc
+                             essing
+0000                 909                     STAFLAG: DBIT 1                 ;Flag for detecting something in the stack
+                     910     
+                     911                     
+                     912             ;----------------------------------------------------------------------
+                     913                     end
+                             
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     6
+
+
+SYMBOL TABLE LISTING
+------ ----- -------
+
+
+N A M E     T Y P E  V A L U E   ATTRIBUTES
+
+ACC. . . .  D ADDR   00E0H   A
+ATDGET . .  N NUMB   81F2H   A
+ATDGSV . .  N NUMB   81F5H   A
+ATDINT . .  N NUMB   81EFH   A
+BACK . . .  C ADDR   023AH   A
+BACK2. . .  C ADDR   019EH   A
+CMD. . . .  N NUMB   822BH   A
+CMD0 . . .  N NUMB   822EH   A
+CMD1 . . .  N NUMB   8231H   A
+COLLISION.  C ADDR   01D0H   A
+COLO . . .  C ADDR   013DH   A
+COLON. . .  N NUMB   007EH   A
+CURRCOMM .  N NUMB   007DH   A
+DIO0 . . .  N NUMB   8000H   A
+DIO1 . . .  N NUMB   8001H   A
+DIO2 . . .  N NUMB   8002H   A
+DIOR0. . .  N NUMB   003EH   A
+DIOR1. . .  N NUMB   003FH   A
+DIOR2. . .  N NUMB   0040H   A
+DONEMOVE .  C ADDR   01E0H   A
+EA . . . .  B ADDR   00A8H.7 A
+ES . . . .  B ADDR   00A8H.4 A
+ESTOP. . .  B ADDR   0024H.4 A
+FOR8 . . .  C ADDR   0196H   A
+IHFASC . .  N NUMB   81E3H   A
+IHFGET . .  N NUMB   81E0H   A
+IHFPUT . .  N NUMB   81E6H   A
+IRCATC . .  N NUMB   8309H   A
+IRCCTA . .  N NUMB   8306H   A
+IRCGC. . .  N NUMB   8303H   A
+IRCGET . .  N NUMB   8300H   A
+IRCGS. . .  N NUMB   82FDH   A
+IRCINT . .  N NUMB   82EEH   A
+IRCISR . .  N NUMB   82F1H   A
+IRCLDT . .  N NUMB   82F4H   A
+IRCPBC . .  N NUMB   82F7H   A
+IRCPUT . .  N NUMB   82FAH   A
+KEYBOARD .  C ADDR   0227H   A
+LEFT4. . .  C ADDR   01A6H   A
+LEFT7. . .  C ADDR   01B6H   A
+LOOP . . .  C ADDR   0183H   A
+MEMODE . .  B ADDR   0090H.0 A
+MOV2 . . .  C ADDR   01EBH   A
+MOV4 . . .  C ADDR   01F1H   A
+MOV6 . . .  C ADDR   01F7H   A
+MOV7 . . .  C ADDR   01FDH   A
+MOV8 . . .  C ADDR   01E5H   A
+MOV9 . . .  C ADDR   0203H   A
+MOVE . . .  C ADDR   020FH   A
+P1 . . . .  D ADDR   0090H   A
+PSW. . . .  D ADDR   00D0H   A
+RI . . . .  B ADDR   0098H.0 A
+RIGHT6 . .  C ADDR   01AEH   A
+RIGHT9 . .  C ADDR   01BEH   A
+SAMESTATE.  C ADDR   01CEH   A
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     7
+
+
+N A M E     T Y P E  V A L U E   ATTRIBUTES
+
+SBUF . . .  D ADDR   0099H   A
+SCON . . .  D ADDR   0098H   A
+SEEGET . .  N NUMB   81CBH   A
+SEEINS . .  N NUMB   81C5H   A
+SEEINT . .  N NUMB   81C2H   A
+SEEPUT . .  N NUMB   81CEH   A
+SEETST . .  N NUMB   81C8H   A
+SEND . . .  C ADDR   0102H   A
+SERIAL . .  C ADDR   0108H   A
+SIAGET . .  N NUMB   814DH   A
+SIAINT . .  N NUMB   814AH   A
+SIAPSI . .  N NUMB   8156H   A
+SIAPSS . .  N NUMB   8159H   A
+SIAPST . .  N NUMB   8153H   A
+SIAPUT . .  N NUMB   8150H   A
+SIBGET . .  N NUMB   8189H   A
+SIBGHB . .  N NUMB   8195H   A
+SIBGHW . .  N NUMB   819BH   A
+SIBINT . .  N NUMB   8186H   A
+SIBPHB . .  N NUMB   8198H   A
+SIBPHW . .  N NUMB   819EH   A
+SIBPSI . .  N NUMB   8192H   A
+SIBPST . .  N NUMB   818FH   A
+SIBPUT . .  N NUMB   818CH   A
+SIOCGB . .  N NUMB   810EH   A
+SIOCPB . .  N NUMB   8111H   A
+SIOGDB . .  N NUMB   8129H   A
+SIOGDW . .  N NUMB   812FH   A
+SIOGET . .  N NUMB   80F6H   A
+SIOGHB . .  N NUMB   811DH   A
+SIOGHW . .  N NUMB   8123H   A
+SIOGRS . .  N NUMB   8114H   A
+SIOGS. . .  N NUMB   80FCH   A
+SIOGTS . .  N NUMB   8117H   A
+SIOINT . .  N NUMB   80F0H   A
+SIOISR . .  N NUMB   80F3H   A
+SIOPBB . .  N NUMB   8135H   A
+SIOPCL . .  N NUMB   8102H   A
+SIOPCR . .  N NUMB   811AH   A
+SIOPDB . .  N NUMB   812CH   A
+SIOPDW . .  N NUMB   8132H   A
+SIOPHB . .  N NUMB   8120H   A
+SIOPHW . .  N NUMB   8126H   A
+SIOPS. . .  N NUMB   80FFH   A
+SIOPSI . .  N NUMB   8108H   A
+SIOPSS . .  N NUMB   810BH   A
+SIOPST . .  N NUMB   8105H   A
+SIOPUT . .  N NUMB   80F9H   A
+SNDGET . .  N NUMB   8210H   A
+SNDGL. . .  N NUMB   8216H   A
+SNDINT . .  N NUMB   820DH   A
+SNDPT. . .  N NUMB   8219H   A
+SNDPUT . .  N NUMB   8213H   A
+SONGDC . .  N NUMB   8204H   A
+SONGET . .  N NUMB   8201H   A
+SONINT . .  N NUMB   81FEH   A
+STACK. . .  C ADDR   0192H   A
+STAFLAG. .  B ADDR   0020H.0 A
+START. . .  C ADDR   014BH   A
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     8
+
+
+N A M E     T Y P E  V A L U E   ATTRIBUTES
+
+STOP . . .  C ADDR   0209H   A
+STOPALL. .  C ADDR   01C6H   A
+SYSCLK1. .  N NUMB   0042H   A
+SYSCLK2. .  N NUMB   0043H   A
+SYSCLK3. .  N NUMB   0044H   A
+SYSCLKF. .  N NUMB   0041H   A
+SYSCV. . .  N NUMB   8003H   A
+SYSESTOP .  N NUMB   800CH   A
+SYSHBI . .  N NUMB   8012H   A
+SYSRES . .  N NUMB   8000H   A
+SYSRES4. .  N NUMB   8009H   A
+SYSSD. . .  N NUMB   8006H   A
+SYSTW. . .  N NUMB   800FH   A
+TEMP . . .  N NUMB   007CH   A
+TH1. . . .  D ADDR   008DH   A
+TI . . . .  B ADDR   0098H.1 A
+TMOD . . .  D ADDR   0089H   A
+TR1. . . .  B ADDR   0088H.6 A
+TRMCLR . .  N NUMB   8264H   A
+TRMCLRB. .  N NUMB   826AH   A
+TRMCLRT. .  N NUMB   8267H   A
+TRMCUR . .  N NUMB   826DH   A
+TRMGDB . .  N NUMB   825BH   A
+TRMGDW . .  N NUMB   825EH   A
+TRMGET . .  N NUMB   8246H   A
+TRMGH. . .  N NUMB   8252H   A
+TRMGHB . .  N NUMB   8255H   A
+TRMGHW . .  N NUMB   8258H   A
+TRMGK. . .  N NUMB   824CH   A
+TRMGQ. . .  N NUMB   824FH   A
+TRMGS. . .  N NUMB   8249H   A
+TRMINT . .  N NUMB   823AH   A
+TRMMNU . .  N NUMB   823DH   A
+TRMMSG . .  N NUMB   8240H   A
+TRMPBB . .  N NUMB   8276H   A
+TRMPBW . .  N NUMB   8279H   A
+TRMPDB . .  N NUMB   8282H   A
+TRMPDW . .  N NUMB   8285H   A
+TRMPHB . .  N NUMB   827CH   A
+TRMPHW . .  N NUMB   827FH   A
+TRMPSI . .  N NUMB   8270H   A
+TRMPST . .  N NUMB   8273H   A
+TRMPUT . .  N NUMB   8261H   A
+TRMWAS . .  N NUMB   8243H   A
+UNDEF. . .  C ADDR   0215H   A
+UTLGBS . .  N NUMB   8066H   A
+UTLGBV . .  N NUMB   8063H   A
+UTLGC. . .  N NUMB   806CH   A
+UTLGC1 . .  N NUMB   806FH   A
+UTLGD. . .  N NUMB   8078H   A
+UTLGH2O. .  N NUMB   80C0H   A
+UTLGI. . .  N NUMB   8072H   A
+UTLGLL . .  N NUMB   80BDH   A
+UTLGLOFF .  N NUMB   805AH   A
+UTLGLON. .  N NUMB   8057H   A
+UTLGO. . .  N NUMB   8099H   A
+UTLGOA . .  N NUMB   80A5H   A
+UTLGOC . .  N NUMB   80B7H   A
+UTLGOD . .  N NUMB   80A8H   A
+A51 MACRO ASSEMBLER      A3                                                                  DATE  01/12/07   PAGE     9
+
+
+N A M E     T Y P E  V A L U E   ATTRIBUTES
+
+UTLGOG . .  N NUMB   80BAH   A
+UTLGOH . .  N NUMB   80B4H   A
+UTLGOI . .  N NUMB   809CH   A
+UTLGOL . .  N NUMB   80B1H   A
+UTLGOR . .  N NUMB   80AEH   A
+UTLGOS . .  N NUMB   80ABH   A
+UTLGOW . .  N NUMB   80A2H   A
+UTLGPIR. .  N NUMB   80C3H   A
+UTLGRIP. .  N NUMB   808DH   A
+UTLGT. . .  N NUMB   8075H   A
+UTLGU. . .  N NUMB   80CCH   A
+UTLGV. . .  N NUMB   80C6H   A
+UTLGW. . .  N NUMB   8069H   A
+UTLGZ. . .  N NUMB   80C9H   A
+UTLHEAD. .  N NUMB   808AH   A
+UTLHLOFF .  N NUMB   804EH   A
+UTLHLON. .  N NUMB   804BH   A
+UTLJOY . .  N NUMB   8090H   A
+UTLLAOFF .  N NUMB   8048H   A
+UTLLAON. .  N NUMB   8045H   A
+UTLLTU . .  N NUMB   8042H   A
+UTLOFF . .  N NUMB   8084H   A
+UTLPAK . .  N NUMB   8096H   A
+UTLPOOFF .  N NUMB   8060H   A
+UTLPOON. .  N NUMB   805DH   A
+UTLPU. . .  N NUMB   80D2H   A
+UTLRC. . .  N NUMB   807EH   A
+UTLRCI . .  N NUMB   807BH   A
+UTLRCO . .  N NUMB   8087H   A
+UTLRCR . .  N NUMB   8081H   A
+UTLRLOFF .  N NUMB   8054H   A
+UTLRLON. .  N NUMB   8051H   A
+UTLSE. . .  N NUMB   80CFH   A
+UTLSON . .  N NUMB   8093H   A
+UTLWAM . .  N NUMB   803FH   A
+UTLWAS . .  N NUMB   803CH   A
+
+
+REGISTER BANK(S) USED: 0
+
+ASSEMBLY COMPLETE, NO ERRORS FOUND
