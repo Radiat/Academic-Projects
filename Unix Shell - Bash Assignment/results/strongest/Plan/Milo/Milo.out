@@ -1,0 +1,42 @@
+Processing files in Milo...
+
+-=Searching header for * Name:
+
+-==Did not find * Name: in Doggypowa.java
+
+-=Compiling Doggypowa.java...
+
+
+-==javac exit code: 0
+
+-=Checking if Doggypowa.java is a main..
+
+-==grep exit code: 0
+
+-==Found main, checking file name for project consistency
+
+-===Doggypowa.java has incorrect file name! Must match Plan
+
+-=Searching header for * Name:
+
+-==Did not find * Name: in Nothing.java
+
+-=Compiling Nothing.java...
+
+
+-==javac exit code: 0
+
+-=Checking if Nothing.java is a main..
+
+-==Nothing.java not main.
+
+
+For all files, * Name: was never located.
+List of java files that did not compile:
+
+All files processe, attempting to execute main...
+
+No Main method found in any method!
+
+
+End of Report.

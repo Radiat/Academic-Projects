@@ -1,0 +1,47 @@
+Processing files in Chrissy...
+
+-=Searching header for * Name:
+
+-==Found * Name: in Plan.java
+
+-=Compiling Plan.java...
+
+
+-==javac exit code: 0
+
+-=Checking if Plan.java is a main..
+
+-==grep exit code: 0
+
+-==Found main, checking file name for project consistency
+
+-===Plan.java has correct file name!
+
+-=Searching header for * Name:
+
+-==Did not find * Name: in Test.java
+
+-=Compiling Test.java...
+
+Test.java:3: <identifier> expected
+}
+^
+1 error
+
+-==javac exit code: 1
+
+-=Checking if Test.java is a main..
+
+-==Test.java not main.
+
+
+List of java files that did not compile:
+Test.java
+
+All files processe, attempting to execute main...
+
+Exception in thread "main" java.lang.NoClassDefFoundError: Plan/java
+java exit status: 1
+
+
+End of Report.

@@ -1,0 +1,30 @@
+Processing files in amanda...
+
+-=Searching header for * Name:
+
+-==Did not find * Name: in amandascrazycoolfirstjava.java
+
+-=Compiling amandascrazycoolfirstjava.java...
+
+amandascrazycoolfirstjava.java:1: 'class' or 'interface' expected
+Haha this is my first java program!
+^
+1 error
+
+-==javac exit code: 1
+
+-=Checking if amandascrazycoolfirstjava.java is a main..
+
+-==amandascrazycoolfirstjava.java not main.
+
+
+For all files, * Name: was never located.
+List of java files that did not compile:
+amandascrazycoolfirstjava.java
+
+All files compiled, attempting to execute main...
+
+No Main method found in any method!
+
+
+End of Report.
