@@ -1,0 +1,6 @@
+05carpio: Compiling.
+ 
+05carpio: Makefile did not work (or no Makefile)
+gcc -Wall phone_names.c -o phone_names
+phone_names.c: In function `phonemmatch':
+phone_names.c:44: warning: subscript has type `char'

@@ -1,0 +1,28 @@
+CSCB09              Assignment Feedback File                     A3
+
+===================================================================
+Login:   05carpio
+===================================================================
+
+Correctness and Compliance
+
+    phone_names
+ 23 /25   - Minor problems
+    
+
+Makefile:
+  0/5     - No Makefile, or cannot be run on fissure (e.g.: ftp problem)
+
+Program design:
+ 10/10
+  
+  
+design.txt:
+  
+  5/3
+
+User Guide
+    
+  10/10   
+
+TOTAL A3 mark:  48/55

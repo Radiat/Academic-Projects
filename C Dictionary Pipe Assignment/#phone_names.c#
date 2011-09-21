@@ -1,0 +1,199 @@
+/* Assignment 3
+ * Chris Carpio
+ * 994954518
+ * phone_names.c , pipe and fork file
+ */
+
+
+#include <stdio.h>
+#include <unistd.h>
+#include <stdlib.h>
+#include <string.h>
+#include <ctype.h>
+#include <wait.h>
+
+
+#define DICTDEF "dict.dct"
+#define EXT ".dic"
+#define UEXT ".DIC"
+#define DEFAULT_DICTIONARY "/usr/share/dict/words"
+#define MAX_WORD 50
+
+void usage(char *prog)
+{
+  fprintf(stderr, "usage: %s [-d dictionary] string\n", prog);
+  fprintf(stderr, "string must contain only letters and numbers\n");
+  exit(2);
+}
+
+/* remove terminating newline from string s */
+int chomp(char *s)
+{
+  int len = strlen(s);
+  if (s[len-1] == '\n') {
+    s[len-1] = '\0';
+    return 1;
+  }
+  return 0;
+}
+
+int phonemmatch (char *word, char *string)
+{
+//printf("matching '%s' and '%s'\n", word, string);
+  while (*word && *string) {
+    if (isalpha(*string) && toupper(*word) != toupper(*string)) {
+      return 0;
+    } else if (*string == '2') {
+      if (!(toupper(*word)=='A' ||
+	    toupper(*word)=='B' ||
+	    toupper(*word)=='C')) {
+	return 0;
+      }
+    } else if (*string == '3') {
+      if (!(toupper(*word)=='D' ||
+	    toupper(*word)=='E' ||
+	    toupper(*word)=='F')) {
+	return 0;
+      }
+    } else if (*string == '4') {
+      if (!(toupper(*word)=='G' ||
+	    toupper(*word)=='H' ||
+	    toupper(*word)=='I')) {
+	return 0;
+      }
+    } else if (*string == '5') {
+      if (!(toupper(*word)=='J' ||
+	    toupper(*word)=='K' ||
+	    toupper(*word)=='L')) {
+	return 0;
+      }
+    } else if (*string == '6') {
+      if (!(toupper(*word)=='M' ||
+	    toupper(*word)=='N' ||
+	    toupper(*word)=='O')) {
+	return 0;
+      }
+    } else if (*string == '7') {
+      if (!(toupper(*word)=='P' ||
+	    toupper(*word)=='Q' ||
+	    toupper(*word)=='R' ||
+	    toupper(*word)=='S')) {
+	return 0;
+      }
+    } else if (*string == '8') {
+      if (!(toupper(*word)=='T' ||
+	    toupper(*word)=='U' ||
+	    toupper(*word)=='V')) {
+	return 0;
+      }
+    } else if (*string == '9') {
+      if (!(toupper(*word)=='W' ||
+	    toupper(*word)=='X' ||
+	    toupper(*word)=='Y' ||
+	    toupper(*word)=='Z')) {
+    return 0;
+      }
+    } else {
+      return 0;
+    }
+    word++;
+    string++;
+  }
+  return (*word == *string);
+}
+
+
+int main2 (char *dictionaryname, char *phoneNum) {
+  printf("%s\n", dictionaryname);
+  printf("%s\n", phoneNum);
+  //char *dictionaryname = DEFAULT_DICTIONARY;
+  
+  char word[MAX_WORD];
+  FILE *dict;
+
+  if( (dict = fopen(dictionaryname, "r")) == NULL) {
+    perror("fopen:");
+    exit(2);
+  }
+
+  while (fgets(word, sizeof(word), dict)) {
+    chomp(word);
+    //printf("Word: %s\n", word);
+    if (phonemmatch(word, phoneNum))
+      printf("%s\n", word);
+  }
+
+  fclose(dict);
+  exit(0);
+}
+
+int main (int argc, char *argv[])
+{
+//char *phoneNum;
+char *fileList[100];
+int i, n, j, status; 
+int arrayPos = 0;
+	if (argc == 0) {
+		perror("No arguments specified. Usage: [dictFile] string\n");
+		return 1;
+	}
+	if (argc == 1) {
+		perror("No Dictionaries specified! Using default dictionary...\n");
+		//phoneNum = argv[argc - 1];
+	}
+	else {
+		//phoneNum = argv[argc - 1];
+		for (i = 1; i < argc - 1; i++) {
+			//printf("Optind: %d\n", optind);
+			//printf("Dictionary file: %s\n", argv[i]);
+			if ((strstr(argv[i], EXT) == NULL) && strstr(argv[i], UEXT) == NULL) {
+				printf("Dictionary file %s does not end in %s\n", argv[i], EXT);
+			}
+			else {
+				//strcat(ext, argv[i]);
+				fileList[arrayPos] = argv[i];
+				arrayPos++;
+			}			
+		}
+	}
+	
+	int fd[arrayPos - 1][2];
+	char buf[256];
+	
+	for (i = 0; i < arrayPos; i++) {
+		 pipe(fd[i]);
+		 if (fork() == 0) {
+      	for (j = 0; j < i; j++) {    
+       		close(fd[j][0]);
+        	close(fd[j][1]);
+        	}
+      	close(fd[i][1]);                  
+        main2(fileList[i], argv[argc - 1]);
+      	}        
+	}
+	
+    for (i = 0; i < arrayPos; i++) {                   
+      n = sprintf(buf, "%d", i*4);
+      write(fd[i][1], buf, n);
+    }
+    
+    
+    for(i = 0; i < arrayPos; i++) {                    
+      close(fd[i][1]);
+    }
+    
+    for (i = 0; i < arrayPos; i++) {                   
+        int pid;
+        if ((pid = wait(&status)) == -1) {
+          perror("wait");
+        } else {
+          if (WIFEXITED(status)) {
+            printf("Process %d exited with %d\n", pid, WEXITSTATUS(status));
+          }
+        }
+      }
+	
+	return 0;
+	
+}
+

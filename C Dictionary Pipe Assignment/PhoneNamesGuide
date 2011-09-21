@@ -1,0 +1,57 @@
+The PhoneNamesGuide
+
+T	his program requires one program: phone_names.c and
+requires at least one 'dictionary' file with an '.dic'
+extension.
+
+The usage of executing this program is:
+
+phone_names.c [dictionary]... string
+
+	This program will determine the different words
+that a series of valid string, or phone numbers can create. 
+It accomplishes this task through one or more dictionary
+files that the user must specify when executing the program.
+For example, one can execute this program through using
+the following command:
+
+phone_names.c EXAMPLE.DIC 2.DIC 3337
+
+	In which this program will search both files for any kind of
+possible words that could be made on a numerical phone of
+the characters 3337. 
+
+	The user can do an initial search by executing the program,
+however the program does repeat itself in that the user can
+continue to enter information on a prompt, in the exact
+same format they used to execute the program with the exception
+of the file name phone_names.c. This can continue until the
+user wishes to exit, in which case the proper command on the
+prompt is simply 'done', without the quotes.
+
+This program will require as a prerequisite:
+-A proper initilization
+-One valid .dic file,
+-A String for matching
+The program cannot run without these two requirements. There are
+some other restrictions:
+-If the dictionary file does not end in .dic, the program will
+notify you of it's findings and simply ignore the file.
+-The program will not explicitly notify you of not finding
+any results. Blank results usually indicate no results found.
+
+	During the course of the program some error messages
+may occur. Here is a brief list:
+-Dictionary file may not open for various reasons.
+-The program may not fork correctly. This is due to perhaps
+a lack of system resources.
+-The program may hang on not being able to wait for it's
+concurrent processes.
+
+
+There is one notable bug: Sometimes a Bus error may occur.
+If this occurs, try other input for now, as this is 
+a problem that should be fixed in a patch.
+
+PNG v. 1.1
+

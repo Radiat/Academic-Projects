@@ -1,0 +1,55 @@
+Design Philosophy and Methods for phone_names.c
+
+This program makes use of forks, pipes and many, many functions.
+
+The user philosophy should be mentioned before anything else. The 
+program is rather harsh on users to follow a strict discipline not
+because it's easier to code (though that is a healthy byproduct),
+it is because the program becomes dangerously closer to bloating
+the system with each assumption. While it is entirely possible
+for someone to modify the program so that for example, no dictionaries
+would mean use any dictionary avaliable, that action has dangerous 
+consequences since there could be many files, or the user could
+be caught unprepared. Some dictionaries could be fairly big, and
+so the user may find herself trapped (if only briefly) for a 
+misstroke. It would be beneficial to assume the worst.
+
+Regarding the fork and pipe hiearchy, it is heavily based on the
+example file workers.c, however there have been some obvious
+changes. The program has been set up to create n number of children,
+where n = amount of dictionary files. Consequently, there is
+one parent that waits for them all, and once input starts
+to flood from the children the parent simply prints it. Each
+child is dedicated to searching through one dictionary file,
+and each invokes the search method.
+
+The pipe architecture is roughly similar to the forks. For 
+each child created, or n children there are n amount of 
+pipes. In terms of read/write, the children write to the
+parent, in which again simply outputs what the children
+wrote to it. The necessary read file descriptors are closed
+on the children, and visa versa for the parents in order
+to facilitate transfer. The children are unique in that it
+handles inside the process the labling of the dictionary
+file to the parent as well as line breaks.
+
+In terms of repetition for the user, before the 
+user is allowed to input more data the pipes the 
+children used are closed, and so are the processes themselves.
+This is done for simplicity, and as a result no adverse
+effects had been observed.
+The program issues a wait command and reads the data when
+the children have sent the proper exit signal.
+
+The program could be thought of as a office boss that's too busy
+playing office politics than to do their own work: The boss
+is the parent, and his underlings are his children. He 'delegates'
+the hard work, or in this program the searching to his children
+and simply waits for completion. The children eventually get it 
+done with preformatted work and text, in which the boss simply
+parrots their work while taking all the credit. To his 
+superiors, he simply asks if he can do it again, and without the
+magic word 'done' the children are off to work yet again in the 
+corporate trap.
+
+
