@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT rentor (unit*, landlord*) >
+  <!ELEMENT unit (address, neighborhood, distance, price, beds?, baths?, photos?) >
+    <!ATTLIST unit unitid ID #REQUIRED >
+    <!ATTLIST unit landid IDREF #REQUIRED >
+    <!ELEMENT address (street, unitnum?, city, province) >
+      <!ELEMENT street (#PCDATA) >
+      <!ELEMENT unitnum (#PCDATA) >
+      <!ELEMENT city (#PCDATA) >
+      <!ELEMENT province (#PCDATA) >
+    <!ELEMENT neighborhood (#PCDATA) >
+    <!ELEMENT distance (#PCDATA) >
+    <!ELEMENT price (#PCDATA) >
+    <!ELEMENT beds (#PCDATA) >
+    <!ELEMENT baths (#PCDATA) >
+    <!ELEMENT photos (photo)* >
+      <!ELEMENT photo EMPTY >
+      <!ATTLIST photo url CDATA #REQUIRED >
+  <!ELEMENT landlord (name, address, phone) >
+    <!ATTLIST landlord landid ID #REQUIRED >
+    <!ELEMENT name (first, last) >
+      <!ELEMENT first (#PCDATA) >
+      <!ELEMENT last (#PCDATA) >
+    <!ELEMENT phone (#PCDATA) >

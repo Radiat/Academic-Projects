@@ -1,0 +1,122 @@
+<html>
+<head>
+<title>XML Validator README</title>
+</head>
+<body>
+
+<pre>
+XML Validator README
+--------------------
+
+In this <a href=".">directory</a> you should see 7 files:
+
+  - Readme (this file)
+  - Validator.class
+  - Validator.java
+  - nest.xml
+  - personnel.xml
+  - personnel.dtd
+  - xerces.jar
+
+The two "personnel" files are provided as an example that you can validate and
+change and revalidate in order to get a feel for how the Validator works.
+The nest.xml example is provided to show how validation against an html
+standard (in this case xhtml strict) is performed.
+
+You will need to download the above files into a directory.  Note as before,
+the jar file occupies a lot of space.  All the jar files are available in 
+/student1/Courses/cscc09 on the fissure.utsc Unix system, so you can change your
+class paths (examples below) accordingly to refer to /student1/Courses/cscc09/xerces.jar
+for example rather than just xerces.jar in the local directory.
+
+Compiling the Validator
+-----------------------
+
+The Validator is written in Java. If you haven't read the Java section in the
+Student Guide and tried the Java examples you should do that first.
+
+The Validator makes use of the SAX parser provided with Xerces (Apache's Java
+based XML package). You'll need to have the xerces.jar file in your CLASSPATH
+to be able to compile and run the example. For the purposes of this example,
+you can either set the CLASSPATH environment variable to to reference the jar
+file, or you can provide the full path to the xerces.jar file on the command
+line to the Java compiler and VM. In this example I'll be providing the path on
+the command line because that's the way you'll be doing it in your assignments.
+
+I am assuming that you have copied all of the 7 files above into one directory.
+To compile the Validator, issue the command:
+
+  javac -classpath xerces.jar:. Validator.java
+
+from the directory where you've copied the Validator.java and other
+files. If the compile was successful you should now see a file named
+Validator.class. You'll see a warning about a "deprecated API", ignore it.
+I have provided file Validator.class in case you want to run the validator
+on a system without a Java compiler installed.
+
+
+Running the Validator
+---------------------
+
+Once you've got the Validator.class file you're ready to start validating! Type
+the command:
+
+  java -cp .:xerces.jar Validator
+
+or
+
+ java -cp .;xerces.jar Validator  (IF RUNNING ON WINDOWS.)
+
+to print out the usage info. You should see a message describing the basic
+syntax of the Validator. The message should look like:
+
+  Usage: java -cp <classpath> Validator [-v] <XML document>
+
+The required argument, <XML document>, is the name of the document you're going
+to validate. The optional argument, -v, turns on verbose mode. When run in
+verbose mode you'll see more information printed to the console while your XML
+document is being validated. If verbose mode is used the Validator will report
+violating line numbers, type of error, etc. If verbose mode is not used you
+won't see anything printed to the terminal, but the return code can be accessed
+by querying the $? variable (i.e. type "echo $?"). If the value of $? is 0 then
+the XML document is valid w.r.t. its DTD.
+
+
+An example
+----------
+
+Make sure the personnel.xml and personnel.dtd files are in the current directory
+and type the command:
+
+  java -cp .:xerces.jar Validator -v personnel.xml
+
+You should see the following output:
+
+  Validating personnel.xml...
+  personnel.xml passed validation test.
+
+Now, edit the personnel.xml file, removing the required <given>Big</given>
+attribute from the person id="Big.Boss" element (line 6). then run the Validator
+again. Now you should see something like:
+
+  Validating personnel.xml...
+  personnel.xml:6: org.xml.sax.SAXParseException: The content of element
+  type "name" is incomplete, it must match "((family,given)|(given,family))".
+
+Error messages like these will help a great deal when debugging your
+assignments.
+
+
+Troubleshooting
+---------------
+
+- Is your CLASSPATH correct?
+- Is the path to xerces.jar correct?
+- Is java/javac in your search PATH?
+- Did you copy the personnel files into your current directory?
+- If you're running on Windows you'll have to make some adjustments to your
+  CLASSPATH (Hint: replace ":" with ";" and "/" with "\").
+
+</pre>
+</body>
+</html>

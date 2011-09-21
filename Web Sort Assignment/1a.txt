@@ -1,0 +1,33 @@
+Assignment 1a Design Report
+Chris Carpio
+994954518
+
+This XHTML site gathers real estate data from a XML file and outputs it
+to be compatible for viewing on a standards-compliant web browser such
+as Firefox. 
+
+The site simply requires an XML file that is valid with the accompaning
+DTD. This XML file must be called 1a.xml, and must pass validation with
+the DTD file, 1a.dtd. The XML file, if properly formatted under the DTD
+is all the program needs. A XSL processor is required to transform both
+1a.xml and 1a.xsl (the latter included by default) to produce two files:
+price.html and distance.html. 
+
+The index.html file must be opened for the data to display. There will be
+two frames; the left as a navigation bar and the right for all real estate
+data. Simply clicking on one of two links will display the real estate
+data on the right frame. The information can currently be sorted by either
+price or distance, in ascending form. The units are grouped by neighborhood.
+
+Currently the scalability of the site rests upon the number of pictures in
+one given entry, and the size of the pictures. For design purposes this
+page was created with a small amount of listings in mind. Having 12,000
+entries would probably make the page very sluggish to load if only for the
+fact that some of those 12,000 may have pictures. Future versions would
+implement a rather less eye-pleasing drop-box solution to handle multiple
+pictures, which would pop-up in another window.
+
+This site conforms to the specification to the letter, with not many extra
+features enabled as of yet. The supplied CSS file makes the page very easy to
+read, even though the visual quality is very suspect. Nevertheless the site was
+made to be very lightweight with minimal bloat to support pictures.

@@ -1,0 +1,45 @@
+
+body {
+	background-color: green;
+	font-family: monospace;
+	font-size: 8pt
+	}
+
+td {padding: 1cm 0cm}
+
+th { font-size: 300%;
+	text-align: center
+	}
+
+td.addr {
+	color: red;
+	font-size: 150%;
+	text-align: right
+	}
+
+td.landl	{
+	color: yellow;
+	font-size: 150%;
+	text-align: right
+	}
+
+td.info	{
+	color: purple;
+	font-size: 150%;
+	text-align: left
+	}
+
+td.price {
+	color: black;
+	font-size: 200%;
+	text-align: left
+	}
+
+td.neigh	{
+	color: red;
+	font-size: 300%;
+	}
+
+
+	
+	

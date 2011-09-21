@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html
+  PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+   <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+      <title>Sorting</title>
+      <link rel="stylesheet" type="text/css" href="1b.css" />
+    <script type="text/javascript">
+      var req = new XMLHttpRequest();
+      var urlparam = "url=http://starveling.utsc.utoronto.ca:28010/cgi-bin/saxon.cgi?xmldoc=1b.xml%26xsldoc=select.xsl";
+      var url = "http://www.utsc.utoronto.ca/~rosselet/cscc09/asn/proxy.cgi?"+ urlparam;
+
+      function updateUI() {
+	var div = document.getElementById('target');
+	if (req.readyState == 4) {
+	  if (req.status == 200) 
+            div.innerHTML = req.responseText;
+	  else
+	    alert("Unable to load document\n" + req.statusText);
+        };
+      }
+      function replaceContent(url) {
+        req.open('GET',url,true);  // make an AJAX call to the specified url
+	req.onreadystatechange = updateUI;  // callback function
+        req.send(null);  // send the AJAX request
+      }
+    </script>
+   </head>
+   <body><button type="button" onclick="replaceContent(url)">Click me to begin!</button>
+	<br />
+	<br /> <div id="target" style="color: blue; border: solid 1px black; margin: 10px"> </div>
+	<br />
+	<br />
+	</body>
+</html>

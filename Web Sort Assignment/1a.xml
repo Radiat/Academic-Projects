@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE rentor SYSTEM "1a.dtd">
+<rentor>
+	<unit unitid="House" landid="Adelaide">
+		<address>
+			<street>101 Adelaide St. W.</street>
+			<city>Toronto</city>
+			<province>Ontatio</province>
+		</address>
+		<neighborhood>Adelaide</neighborhood>
+		<distance>100</distance>
+		<price>1250</price>
+		<beds>2</beds>
+		<photos>
+			<photo
+			url="http://www.utsc.utoronto.ca/~05carpio/YukiMouse.gif"/>
+			<photo
+			url=""/>
+		</photos>
+	</unit>
+	<unit unitid="Fixer" landid="Esplanade">
+		<address>
+			<street>14 John St.</street>
+			<unitnum>17th Floor</unitnum>
+			<city>Toronto</city>
+			<province>Ontatio</province>
+		</address>
+		<neighborhood>Fashion District</neighborhood>
+		<distance>250</distance>
+		<price>143000</price>
+		<beds>1</beds>
+		<baths>20</baths>
+	</unit>
+	<unit unitid="Mansion" landid="Posh">
+		<address>
+			<street> 8008 Suggestive Ct.</street>
+			<unitnum>1010</unitnum>
+			<city>Toronto</city>
+			<province>Ontario</province>
+		</address>
+		<neighborhood>Adelaide</neighborhood>
+		<distance>1000</distance>
+		<price>1000000</price>
+		<beds>8</beds>
+		<baths>10</baths>
+		<photos>
+			<photo url="http://www.traditional-houseplans.com/images/intf_icon_house.gif"/>
+		</photos>
+	</unit>
+	<unit unitid="Can" landid="Slum">
+		<address>
+			<street>21 Nowhere Ave</street>
+			<unitnum>1337</unitnum>
+			<city>Midgar</city>
+			<province>Northern</province>
+		</address>
+		<neighborhood>Sector 7</neighborhood>
+		<distance>3000</distance>
+		<price>1500</price>
+	</unit>
+	<unit unitid="FlowerBed" landid="Slum">
+		<address>
+			<street>23 Nowhere Ave</street>
+			<unitnum>42</unitnum>
+			<city>Midgar</city>
+			<province>Northern</province>
+		</address>
+		<neighborhood>Sector 7</neighborhood>
+		<distance>2050</distance>
+		<price>100</price>
+		<beds>1</beds>
+	</unit>
+	<unit unitid="Pit" landid="Slum">
+		<address>
+			<street>25 Somewhere Ave</street>
+			<city>Midgar</city>
+			<province>Northern</province>
+		</address>
+		<neighborhood>Sector 7</neighborhood>
+		<distance>1000</distance>
+		<price>1205</price>
+	</unit>
+	<landlord landid="Adelaide">
+		<name>
+			<first>Amanda</first>
+			<last>Tenn</last>
+		</name>
+		<address>
+			<street>103 Adelaide St. W.</street>
+			<city>Ottawa</city>
+			<province>Ontario</province>
+		</address>
+		<phone>905-509-1821</phone>
+	</landlord>
+	<landlord landid="Slum">
+		<name>
+			<first>Chris</first>
+			<last>Carpio</last>
+		</name>
+		<address>
+			<street>101 Adelaide St. W.</street>
+			<city>Ottawa</city>
+			<province>Ontario</province>
+		</address>
+		<phone>416-504-0927</phone>
+	</landlord>
+	<landlord landid="Esplanade">
+		<name>
+			<first>Toronto</first>
+			<last>City of</last>
+		</name>
+		<address>
+			<street>25 Queen St. W.</street>
+			<city>Toronto</city>
+			<province>Ontario</province>
+		</address>
+		<phone>416-392-0405</phone>
+	</landlord>
+	<landlord landid="Posh">
+		<name>
+			<first>Princess</first>
+			<last>Peach</last>
+		</name>
+		<address>
+			<street>120 The Bridal Path</street>
+			<city>Etobicoke</city>
+			<province>Ontario</province>
+		</address>
+		<phone>416-232-4641</phone>
+	</landlord>
+</rentor>
+			
+			
+
+
