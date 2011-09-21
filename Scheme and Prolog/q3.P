@@ -1,0 +1,15 @@
+/*Chris Carpio*/
+/*05carpio*/
+/*994954518*/
+subset([], _).
+subset([X|Y],Z) :- member(X,Z), subset(Y,Z).
+
+sameset(X, Y) :- subset(X, Y), subset(Y, X).
+
+intersect([],A,[]).
+intersect([X|Y], A, [X|Z]) :- member(X, A), intersect(Y,A,Z).
+intersect([X|Y], A, Z) :- intersect(Y,A,Z).
+
+union([],Z,Z).
+union([X|Y], Z,[X|A]) :-  union(Y,Z,A).
+union([X|Y], Z, A) :- member(X,Z),  union(Y,Z,A).

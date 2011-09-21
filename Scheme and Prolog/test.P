@@ -1,0 +1,16 @@
+sentence(Tokens, Rest, sentence(NP, VP)) :-
+nounphrase(Tokens, More, NP),
+verbphrase(More, Rest, VP).
+nounphrase(Tokens, Rest, np(Det, N)) :-
+det(Tokens, More, Det),
+noun(More, Rest, N).
+verbphrase(Tokens, Rest, iv(Verb)) :-
+verb(Tokens, Rest, Verb).
+verbphrase(Tokens, Rest, tv(Verb, NP)) :-
+verb(Tokens, More, Verb),
+nounphrase(More, Rest, NP).
+noun([man | Rest], Rest, man).
+noun([apple | Rest], Rest, apple).
+verb([eats | Rest], Rest, eats).
+verb([sings | Rest], Rest, sings).
+det([the | Rest], Rest, the).

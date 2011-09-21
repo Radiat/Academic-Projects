@@ -1,0 +1,28 @@
+prim(move).
+prim(turnRight).
+prim(pickUp).
+prim(dropOff).
+start(start).
+define(define).
+identifier(id).
+
+
+%Recognizing the first string
+parse(Input, ParseTree) :- command(Input, ParseTree).
+
+%Begins with "Start".
+command([Start|Others], ['start'|More]) :- start(Start), defSet(Others, More).
+
+l
+%Definition Set
+defSet([Definition|Others], ['defSet('|More]) :- define(Definition), definition(Others, More).
+defSet(NotDefinition, ['defSet()'|Others]) :- instrSet(NotDefinition, Others).
+
+definition(something).
+
+%Instruction Set
+instrSet(NotInstruct, ['instrSet()'|Others]) :- end(NotInstruct, Others). 
+instrSet([Instruction|MoreInstruct], ['instrSet(instruction(primative'|Others]) :- prim(Instruction), instr(MoreInstruct, Others).
+
+end([end|[]], ParseTree) :- append([end], [], ParseTree).
+

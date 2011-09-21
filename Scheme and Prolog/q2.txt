@@ -1,0 +1,69 @@
+/*Chris Carpio*/
+/*05carpio*/
+/*994954518*/
+Script started on Sun Mar 23 12:45:46 2008
+fissure[51]:~/pc> xsb[xsb_configuration loaded]
+[sysinitrc loaded]
+[packaging loaded]
+
+XSB Version 2.4 (Bavaria) of July 13, 2001
+[sparc-sun-solaris2.8; mode: optimal; engine: chat; gc: copy; scheduling: local]
+
+| ?- [q2/ ].
+[q2 loaded]
+
+yes
+| ?- causes(D, S).
+
+D = cold
+S = headache;
+
+D = cold
+S = fever;
+
+D = cold
+S = assignment
+
+yes
+| ?- displays(P, S).
+
+P = chris
+S = headache
+
+yes
+| ?- has(P, D).
+
+P = chris
+D = cold
+
+yes
+| ?- halt.
+
+End XSB (cputime 0.04 secs, elapsetime 55.44 secs)
+fissure[52]:~/pc> ^D
+Use "exit" to leave sh.
+fissure[52]:~/pc> less q2.txt[?1h=[24;1H[K[24;1H[K[7mq2.txt (END)[m[24;1H[24;1H[K[?1l>fissure[53]:~/pc> ez[Kxoi[K[Kitexit
+
+script done on Sun Mar 23 12:48:50 2008
+
+---
+
+As for why this exemplifies that the rule is incorrect, it is because 
+the rule only takes into account one symptom, and ignores the rest. 
+
+Meaning, according to the above I could have only a headache, but the rule 
+would demand that I would immediately have a cold.
+
+It doesn't take into account the rest of the symptoms that are associated 
+with a cold, thus I could only simply be having a normal headache. Normally,
+we would like there to be at least a range of symptoms before diagnosing
+a disease!
+
+Additionally, this rule could also indicate that a person has a disease of
+another kind if Prolog was told to keep searching on the has predicate.
+For example, if a headache was common to both a fever and a cold, then 
+Prolog would then indicate that the person has both a fever and a cold.
+
+A possible solution would be to use lists to build a set of symptoms
+for a possible disease, and then check to see if that person exibits
+all of the symptoms in order for them to be diagnosed with the disease.

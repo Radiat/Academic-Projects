@@ -1,0 +1,10 @@
+word(hello).
+word(c24).
+word(blah).
+
+wordList(List, word(W1)) :- append([W1], [], List), word(W1).
+wordList(List, words(word(W1), Words)) :- append([W1], W2, List),
+					  word(W1),
+					  wordList(W2, Words).
+
+

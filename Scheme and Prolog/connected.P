@@ -1,0 +1,14 @@
+connected(d,c).
+connected(d,b).
+connected(b,d).
+connected(a,c).
+connected(c,a).
+connected(a,b).
+connected(b,c).
+connected(b,a).
+connected(c,b).
+connected(c,d).
+path(A,Z,Path) :- path1(A,[Z],Path).
+path1(A,[A|Path1],[A|Path1]).
+path1(A,[Y|Path1],Path):- connected(X,Y),\+(member(X, Path1)),
+path1(A,[X,Y|Path1],Path).

@@ -1,0 +1,188 @@
+%Chris Carpio
+%994954518
+%05carpio
+
+%Primitive definitions. Anything that is beyond the primitive
+%gets sent back as Rest. The third argument is returned to form the parse
+%tree.
+prim([move | Rest], Rest, move).
+prim([turnRight | Rest], Rest, turnRight).
+prim([pickUp | Rest], Rest, pickUp).
+prim([dropOff | Rest], Rest, dropOff).
+
+%Testcase definitions, recognising the infinite amount of testcases.
+testCase([ barrierInFront | Rest], Rest, barrierInFront).
+testCase([ barrierToRight | Rest], Rest, barrierToRight).
+testCase([ pickUp | Rest], Rest, pickUp).
+testCase([ dropOff | Rest], Rest, dropOff).
+testCase([ facingNorth | Rest], Rest, facingNorth).
+testCase([ facingSouth | Rest], Rest, facingSouth).
+testCase([ facingEast | Rest], Rest, facingEast).
+testCase([ facingWest | Rest], Rest, facingWest).
+testCase([ atTerminal | Rest], Rest, atTerminal).
+
+%Misc words for structure of query.
+start([start | Rest], Rest, start).
+defineWord([define | Rest], Rest, define).
+identifier([_|Rest], Rest, _).
+while([while|Rest], Rest, while).
+do([do|Rest], Rest, do).
+if([if|Rest], Rest, if).
+then([then|Rest], Rest, then).
+else([else|Rest], Rest, else).
+not([not|Rest], Rest, not).
+as([as|Rest], Rest, as).
+
+%Special bracket section!
+bracket(['{'|Rest], Rest, '{').
+rbracket(['}'|Rest], Rest, '}').
+cBracket(['('|Rest], Rest, '(').
+crBracket([')'|Rest], Rest, ')').
+
+
+
+%Beginning of program, forwards into multi-loaded function.
+parse(Input, ParseTree) :- command(Input, ParseTree).
+
+%Function for queries that begin with "start".
+command(List, program(Start, DEF, INSTR, End)) :- 
+start(List, More, Start), defset(More, Moar, DEF), 
+instrSet(Moar, Almost, INSTR), 
+end(Almost, End).
+
+
+
+%defSet function.
+
+%Handles any definitions by passing it to the define(X, Y, Z) function,
+%and also carries it forward to other define statements.
+
+%Handles if this defset is accompanied by other defSets.
+defset(Defs, Rest, defSet(DEF)) :-
+define(Defs, Others, DEF), defset(Others, Rest, DEF).
+
+%Base case, returns the list as itself and prints a blank defSet.
+defset(Defs, Defs, '').
+
+%Definition predicate. Recognizes the pertinent string for
+%an identifier (define, as, curly bracket)
+define(Defs, Rest, definition(DEF, ID, AS, LB, INST, RB)) :-
+defineWord(Defs, After, DEF), 
+identifier(After, More, ID),
+as(More, Char, AS),
+bracket(Char, Instr, LB),
+instrSet(Instr, Char2, INST),
+rbracket(Char2, Rest, RB).
+
+%Base for Definition
+define(Defs, Defs, '').
+
+
+
+%instrSet predicates.
+
+%Handles the set of instructions, including the support of more instructions.
+%Forwards actual instructions to instruction(X, Y, Z).
+
+%Special case for instrSet where it halts on the bracket.
+instrSet(Instruct, Rest, '') :-
+rbracket(Instruct, Rest, _).
+
+%Normal case where there is yet another instruction after this.
+instrSet(Instruct, Rest, instrSet(instruction(OP, M))) :-
+instruction(Instruct, Others, OP), 
+instrSet(Others, Rest, M).
+
+%Handles the case where this is either the only, or last instruction.
+instrSet(Instruct, Rest, instrSet(instruction(OP))) :-
+instruction(Instruct, Rest, OP).
+
+%Base case for instrSet, where there are no instrSets at all.
+instrSet(Instruct, Instruct, '').
+
+%Instruction predicates come in 5 flavours: primitive, tests, conditional,
+%iteration or even identifier.
+%Primitive instruction:
+instruction(Instruct, Others, primative(PRIM)) :- prim(Instruct, Others, PRIM).
+%Test instruction:
+instruction(Instruct, Others, TEST) :- test(Instruct, Others, TEST).
+%Conditional instruction:
+instruction(Instruct, Others, COND) :- conditional(Instruct, Others, COND).
+%Iterative instruction:
+instruction(Instruct, Others, ITE) :- iterative(Instruct, Others, ITE).
+%Identifier instruction:
+instruction(Instruct, Others, ID) :- identifier(Instruct, Others, ID).
+
+
+
+
+%Conditionals.
+
+%Conditional primitive that handles the case where conditional is called for the query itself.
+conditional(List, Tree) :-
+conditional(List, _, Tree).
+
+%Conditional for "If test then instructions, else instructions".
+conditional(Cond, Rest, conditional(IF, LB, TEST, RB, THEN, LLB, INSTR, RRB, ELSE, LLLB, INSTR2, RRRB)) :-
+if(Cond, Brack, IF),
+cBracket(Brack, Test, LB),
+test(Test, RBrack, TEST),
+crBracket(RBrack, Then, RB),
+then(Then, Another, THEN),
+bracket(Another, Instr, LLB),
+instrSet(Instr, Yetanother, INSTR),
+rbracket(Yetanother, Else, RRB),
+else(Else, Lllb, ELSE),
+bracket(Lllb, Instr2, LLLB),
+instrSet(Instr2, Rrrb, INSTR2),
+rbracket(Rrrb, Rest, RRRB).
+
+%Conditional for "If test then instructions".
+conditional(Cond, Rest, conditional(IF, LB, TEST, RB, THEN, LLB, INSTR, RRB)) :-
+if(Cond, Brack, IF),
+cBracket(Brack, Test, LB),
+test(Test, RBrack, TEST),
+crBracket(RBrack, Then, RB),
+then(Then, Another, THEN),
+bracket(Another, Instr, LLB),
+instrSet(Instr, Yetanother, INSTR),
+rbracket(Yetanother, Rest, RRB).
+
+
+
+
+
+%Iteration
+
+%Iterative case where this iterative instruction is the query.
+iteration(List, Tree) :-
+iteration(List, _, Tree).
+
+%Iterative while loop.
+iteration(Ite, Rest, iteration(WHILE, LB, TEST, RB, DO, LLB, INSTR, RRB)) :-
+while(Ite, Br, WHILE),
+cBracket(Br, Test, LB),
+test(Test, RBr, TEST),
+crBracket(RBr, Do, RB),
+do(Do, LeftB, DO),
+bracket(LeftB, Instr, LLB),
+instrSet(Instr, RightB, INSTR),
+rbracket(RightB, Rest, RRB).
+
+
+
+
+
+%Test
+
+%Test case that handles "not test".
+test(Test, Others, test(IS, testCase(TEST))) :- not(Test, More, IS), testCase(More, Others, TEST).
+
+%Test case for "test", nothing more.
+test(Test, Others, test(testCase(TEST))) :- testCase(Test, Others, TEST).
+
+
+
+
+%End predicate, determines if this is truly the end or not.
+end([end], end).

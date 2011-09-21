@@ -1,0 +1,6 @@
+p(h(a, X), f(b, Y)).
+q(Y, Y, Y, h(a, (h(b, Y)))).
+r(f(X), g(Y), Z).
+s(f(X), g(X), X).
+t(Y, a).
+u(v(X, X)).

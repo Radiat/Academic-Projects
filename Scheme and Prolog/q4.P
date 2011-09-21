@@ -1,0 +1,128 @@
+/*Chris Carpio*/
+/*05carpio*/
+/*994954518*/
+Y=[1, 2, 3, 4, 1],  append([X|_], [X|[]], Y).
+append([X|_], [X|[]], Y).
+
+L=[1, 3, 5, 2, 1], N=[3, 3, 5, 1, 2], append(_, [A, B|Q], L), append([A], [B], M), append(_, [C, D|E], N), append([C], [D], M).
+append(_, [A, B|Q], L), append([A], [B], M), append(_, [C, D|E], N), append([C], [D], M).
+
+L=[1, 2, 3, 4, 5], M=[1, 2, 4, 5],  append(A, [X|B], L), append(A, B, M).
+append(A, [X|B], L), append(A, B, M).
+
+Script started on Wed Mar 26 05:04:02 2008
+fissure[51]:~/pc> xsb
+
+[xsb_configuration loaded]
+[sysinitrc loaded]
+[packaging loaded]
+
+XSB Version 2.4 (Bavaria) of July 13, 2001
+[sparc-sun-solaris2.8; mode: optimal; engine: chat; gc: copy; scheduling: local]
+
+| ?- [basics].
+[basics loaded]
+
+yes
+| ?- [a  Y=[1, 2, 3, 4, 1],  append([X|_], [X|[]], Y).
+
+Y = [1,2,3,4,1]
+X = 1
+
+yes
+| ?- append([X|_], [X|[]], Y).
+
+X = _h83
+Y = [_h83,_h83];
+
+X = _h83
+Y = [_h83,_h189,_h83];
+
+X = _h83
+Y = [_h83,_h189,_h193,_h83]
+
+yes
+| ?- L=[1, 3, 5, 2, 1], N=[3, 3, 5, 1, 2], append(_, [A, B|Q], L), append([A], [B], M), append(_, [C, D|E], N), append([C], [D], M).
+
+L = [1,3,5,2,1]
+N = [3,3,5,1,2]
+A = 3
+B = 5
+Q = [2,1]
+M = [3,5]
+C = 3
+D = 5
+E = [1,2]; 
+
+yes
+| ?- append(_, [A, B|Q], L), append([A], [B], M), append(_, [C, D|E], N), append([C], [D], M).
+
+A = _h92
+B = _h106
+Q = _h120
+L = [_h92,_h106|_h120]
+M = [_h92,_h106]
+C = _h92
+D = _h106
+E = _h271
+N = [_h92,_h106|_h271];
+
+A = _h92
+B = _h106
+Q = _h120
+L = [_h92,_h106|_h120]
+M = [_h92,_h106]
+C = _h92
+D = _h106
+E = _h271
+N = [_h502,_h92,_h106|_h271];
+
+A = _h92
+B = _h106
+Q = _h120
+L = [_h92,_h106|_h120]
+M = [_h92,_h106]
+C = _h92
+D = _h106
+E = _h271
+N = [_h502,_h506,_h92,_h106|_h271]
+
+yes
+| ?- L=[1, 2, 3, 4, 5], M=[1, 2, 4, 5],  append(A, [X|B], L), append(A, B, M).
+
+L = [1,2,3,4,5]
+M = [1,2,4,5]
+A = [1,2]
+X = 3
+B = [4,5]; 
+
+yes
+| ?- append(A, [X|B], L), append(A, B, M).
+
+A = []
+X = _h97
+B = _h111
+L = [_h97|_h111]
+M = _h111;
+
+A = [_h254]
+X = _h97
+B = _h111
+L = [_h254,_h97|_h111]
+M = [_h254|_h111];
+
+A = [_h254,_h258]
+X = _h97
+B = _h111
+L = [_h254,_h258,_h97|_h111]
+M = [_h254,_h258|_h111]
+
+yes
+| ?- halt.
+
+End XSB (cputime 0.02 secs, elapsetime 101.84 secs)
+fissure[52]:~/pc> exit
+
+exit
+
+script done on Wed Mar 26 05:05:49 2008

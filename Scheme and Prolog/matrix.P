@@ -1,0 +1,36 @@
+/*Chris Carpio*/
+/*994954518*/
+/*05carpio*/
+
+/*Assignment 4 Part 1: Matrix Operations*/
+
+innerProduct([],[],0).
+innerProduct([X|A],[Y|B], Z) :- innerProduct(A, B, G), Z is G + (X * Y).
+
+scalarMult(_, [], []).
+scalarMult(A, [[M|T]|Vectors], [[AM|U]|Others]) :- AM is A * M, scalarMult(A, T, U), scalarMult(A, Vectors, Others).
+scalarMult(A, [M|T], [AM|U]) :- AM is A * M, scalarMult(A, T, U).
+
+matrixAdd([], [], []).
+matrixAdd([A|T], [B|U], [C|V]) :- matrixAdd(A, B, C), matrixAdd(T, U, V).
+matrixAdd([A|T], [B|U], [C|V]) 
+	:- A \= [], A\= [_|_], 
+	C is A + B, matrixAdd(T, U, V).
+
+matrixTranspose([[]|_], []).
+matrixTranspose(M, [MT|T]) :- takeFirst(M, MT, L), matrixTranspose(L, T).
+
+takeFirst([], [], []).
+takeFirst([ [A|Others]|Vectors], [A|First], [Others|More]) 
+	:- takeFirst(Vectors, First, More).
+
+matrixMult([], [], []).
+matrixMult([[A]|Vectors], [B|_], [C|CTail]) 
+	:- 	takeFirst(B, Firsts, Others), innerProduct(A, Firsts, C), 
+		matrixMult(Vectors, Others, CTail).
+
+
+tensorProduct([], [], 0).
+tensorProduct([[A|ARow]|_], [B], [K|KTail])
+:- scalarMult(A, B, K), tensorProduct(ARow, B, KTail).
+

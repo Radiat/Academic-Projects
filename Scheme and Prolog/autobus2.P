@@ -1,0 +1,14 @@
+start(start).
+end(end).
+prim(move).
+prim(turnRight).
+prim(pickUp).
+prim(dropOff).
+
+parse(Input, ParseTree) :- program(ParseTree, Input, []).
+program(program(start(Start), DEF, INST, end(End))) :- defSet(DEF), instrSet(INST).
+defSet(defSet(DEF)) :- definition(DEF).
+defSet(defSet(DEF, MOREDEF)) :- definition(DEF), defSet(MOREDEF).
+defSet(defSet(Any)).
+instrSet(instrSet(PRIM)) :- prim(PRIM).
+

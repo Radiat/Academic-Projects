@@ -1,0 +1,18 @@
+/*Chris Carpio*/
+/*05carpio*/
+/*994954518*/
+disease(cold).
+sympton(headache).
+sympton(fever).
+sympton(assignment).
+person(chris).
+
+causes(D, S) :- disease(D), sympton(S).
+displays(P, S) :- person(P), sympton(S).
+
+has(P, D) :- causes(D, S), displays(P, S).
+
+put(S, L, [S|L]).
+build(D, S, L) :- causes(D, S), put(S, L).
+allsymptons(D, S) :- L=[], build(D, S, L), member(S, L).
+correctHas(P, D) :- displays(P, S), allsymptons(D, S).

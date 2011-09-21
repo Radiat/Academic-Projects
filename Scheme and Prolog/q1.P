@@ -1,0 +1,9 @@
+/*Chris Carpio*/
+/*05carpio*/
+/*994954518*/
+mother(X, Y) :- female(X), parent(X, Y).
+brothers(X, Y) :- male(X), male(Y), parent(Z, X), parent(Z, Y), \=(X, Y).
+sisters(X, Y) :- female(X), female(Y), parent(Z, X), parent(Z, Y), \=(X, Y).
+siblings(X, Y) :- parent(Z, X), parent(Z, Y), \=(X, Y).
+cousins(X, Y) :- siblings(A, B), parent(A, X), parent(B, Y), \=(X, Y).
+cousins(X, Z) :- cousin(X, Y), cousin(Y, Z).

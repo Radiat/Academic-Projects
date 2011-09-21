@@ -1,0 +1,9 @@
+p(1).
+p(2) :- !.
+p(3).
+
+foo([Element], [Element]).
+foo(PList, [Element|List]) :- append(PList1, [Element|PList2], PList), 
+append(PList1, PList2, NewPList), foo(NewPList, List).
+
+add4(X, Y, Z, W, Sum) :- Sum is ((X + Y) + (Z + W)).
