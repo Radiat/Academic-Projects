@@ -1,0 +1,50 @@
+CSC207/B07          Assignment Feedback File                E3
+==============================================================
+
+Login:   05carpio
+
+Part 1:  Regular Expression Exercise
+
+  Correctness
+     
+    29/29 PyUnit tests (results in p1.testing.results)
+
+  Design
+
+     3/4  Uses inheritance from basic parent class, but RE5 omits tabs
+
+
+  Style
+         These marks are for style including the use of whitespace, 
+         comments, variable names
+
+     3/3  I would be happy to inherit this quality of code at my job
+
+TOTAL Part 1: 35/36
+
+Part 2: Weather Data Averages
+
+    Testing output is in p2.testing.results
+
+    You can also use the makefile p2.mk to rerun one or all of the 
+    tests on your code.
+
+    1/18  tests with incorrect arguments  (tests 0-5)
+
+    6/12  tests with default values for arguments (tests 6-9)
+
+    8/12  output from most basic tests (tests 10-12)
+
+    4/16  more complicated tests (tests 13-16)
+
+    Implementation requirements:
+
+
+    Style and Design: OK unless there are deductions below this line.
+
+    -3 Design: Code all in almost one (or zero) big function.
+
+
+
+TOTAL Part 2 Program: 16/58
+

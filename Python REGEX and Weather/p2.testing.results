@@ -1,0 +1,171 @@
+
+================================================================
+   test0
+nice python average_weather.py -b -j > test0.stud.out 2>test0.stud.err
+Should give usage or report extra or unknown option flags
+------------------------------------
+Traceback (most recent call last):
+  File "average_weather.py", line 60, in ?
+    option, single = getopt.getopt(sys.argv[1:], "s:e:thp")
+  File "/usr/local/lib/python2.4/getopt.py", line 91, in getopt
+    opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
+  File "/usr/local/lib/python2.4/getopt.py", line 191, in do_shorts
+    if short_has_arg(opt, shortopts):
+  File "/usr/local/lib/python2.4/getopt.py", line 207, in short_has_arg
+    raise GetoptError('option -%s not recognized' % opt, opt)
+getopt.GetoptError: option -b not recognized
+------------------------------------
+Should not have any output below this line
+------------------------------------
+
+================================================================
+   test1
+nice python average_weather.py -h test1.stud.out extraArg 2 2>test1.stud.err
+Should give usage or report extra arguments
+------------------------------------
+------------------------------------
+Should not have any output below this line
+There were 822 number of valid humidity measurements during this period. The average humidity is 83.3588527981.------------------------------------
+
+================================================================
+   test2
+nice python average_weather.py -s  >test2.stud.out 2>test2.stud.err
+Should give usage or report that -s flag needs a parameter
+------------------------------------
+Traceback (most recent call last):
+  File "average_weather.py", line 60, in ?
+    option, single = getopt.getopt(sys.argv[1:], "s:e:thp")
+  File "/usr/local/lib/python2.4/getopt.py", line 91, in getopt
+    opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
+  File "/usr/local/lib/python2.4/getopt.py", line 195, in do_shorts
+    opt)
+getopt.GetoptError: option -s requires argument
+------------------------------------
+Should not have any output below this line
+------------------------------------
+
+================================================================
+   test3
+nice python average_weather.py -s 2004/20/05 >test3.stud.out 2>test3.stud.err
+Should give usage or report that -s parameter is not a valid date
+------------------------------------
+Traceback (most recent call last):
+  File "average_weather.py", line 85, in ?
+    then = datetime.date(int(splitDate[0]), int(splitDate[1]), int(splitDate[2]))
+ValueError: month must be in 1..12
+------------------------------------
+Should not have any output below this line
+------------------------------------
+
+================================================================
+   test4
+nice python average_weather.py -s 2001/05/05 >test4.stud.out 2>test4.stud.err
+Should report that start date is before valid period
+------------------------------------
+On 2005-02-03, a non-numeric value for temperature was found.On 2005-02-04, a non-numeric value for temperature was found.On 2005-02-05, a non-numeric value for temperature was found.On 2005-02-06, a non-numeric value for temperature was found.On 2005-02-07, a non-numeric value for temperature was found.On 2005-02-08, a non-numeric value for temperature was found.On 2005-02-09, a non-numeric value for temperature was found.------------------------------------
+Should not have any output below this line
+
+There were 921 number of valid temperature measurements during this period. The average temperature is 8.36708794788.
+------------------------------------
+
+================================================================
+   test5
+nice python average_weather.py -s 2006/05/31 -e 2006/05/04  test5.stud.out 2>test5.stud.err
+Should report that end date is before start date
+------------------------------------
+------------------------------------
+Or else should report no valid measurements in range
+------------------------------------
+
+================================================================
+   test6
+nice python average_weather.py -t  test6.stud.out  2>test6.stud.err
+Should report duration of 908 days below this line to get marks
+------------------------------------
+There were 815 number of valid temperature measurements during this period. The average temperature is 7.59500122699.------------------------------------
+Should have no output below line: test6.stud.err
+On 2005-02-03, a non-numeric value for temperature was found.On 2005-02-04, a non-numeric value for temperature was found.On 2005-02-05, a non-numeric value for temperature was found.On 2005-02-06, a non-numeric value for temperature was found.On 2005-02-07, a non-numeric value for temperature was found.On 2005-02-08, a non-numeric value for temperature was found.On 2005-02-09, a non-numeric value for temperature was found.
+================================================================
+   test7
+nice python average_weather.py  -e 2003/11/04 -t  test7.stud.out  2>test7.stud.err
+Should report 4 days with temp about 8.2 below this line
+------------------------------------
+There were 3 number of valid temperature measurements during this period. The average temperature is 9.25.------------------------------------
+Should have no output below line: test7.stud.err
+
+================================================================
+   test8
+nice python average_weather.py -s 2006/05/04 -t  test8.stud.out  2>test8.stud.err
+Should report 28 days with temp about 14 below this line
+------------------------------------
+There were 27 number of valid temperature measurements during this period. The average temperature is 13.5481111111.------------------------------------
+Should have no output below line: test8.stud.err
+
+================================================================
+   test9
+nice python average_weather.py -s 2006/05/04 -e 2006/05/31  test9.stud.out 2>test9.stud.err
+Should have no output below this line to pass test
+------------------------------------
+------------------------------------
+
+================================================================
+   test10
+nice python average_weather.py -s 2004/05/20 -e 2004/05/26 -t test10.stud.out  2>test10.stud.err
+Should report 7 days w/ average about 13.8 below this line
+------------------------------------
+There were 6 number of valid temperature measurements during this period. The average temperature is 13.565.------------------------------------
+Should have no output below line: test10.stud.err
+
+================================================================
+   test11
+nice python average_weather.py -s 2004/05/20 -e 2004/05/26 -p test11.stud.out  2>test11.stud.err
+Should report average precip about 5.5 below this line
+------------------------------------
+There were 6 number of valid precipitation measurements during this period. The average precipitation is 6.434.------------------------------------
+Should have no output below line: test11.stud.err
+
+================================================================
+   test12
+nice python average_weather.py -s 2004/05/20 -e 2004/05/26 -h test12.stud.out  2>test12.stud.err
+Should report an average humidity about 98 below this line
+------------------------------------
+There were 6 number of valid humidity measurements during this period. The average humidity is 97.9666666667.------------------------------------
+Should have no output below line: test12.stud.err
+
+================================================================
+   test13
+nice python average_weather.py -s 2006/01/26 -e 2006/03/17 -t test13.stud.out  2>test13.stud.err
+Should report a duration of 51 days and an average about -1 below this line
+------------------------------------
+There were 46 number of valid temperature measurements during this period. The average temperature is -1.36210869565.------------------------------------
+Should have no output below line: test13.stud.err
+
+================================================================
+   test14
+nice python average_weather.py -s 2004/12/25 -e 2004/12/30 -h test14.stud.out  2>test14.stud.err
+Should report a duration of 6 days and an average about 93 below this line
+------------------------------------
+Since there was no data, an average cannot be obtained.------------------------------------
+Should have no output below line: test14.stud.err
+Traceback (most recent call last):
+  File "average_weather.py", line 171, in ?
+    fileOut.write("There were "+ str(countValid)+\
+ZeroDivisionError: float division
+
+================================================================
+   test15
+nice python average_weather.py -s 2005/02/01 -e 2005/02/20 -h test15.stud.out  2>test15.stud.err
+Should report a duration of 12 days and an average about 83 below this line
+------------------------------------
+There were 19 number of valid humidity measurements during this period. The average humidity is 44.0822631579.------------------------------------
+Should report "nd" errors below this line
+------------------------------------
+
+================================================================
+   test16
+nice python average_weather.py -s 2005/02/01 -e 2005/02/06 -h test16.stud.out  2>test16.stud.err
+Should either say nothing or report that no data are available below this line
+------------------------------------
+There were 5 number of valid humidity measurements during this period. The average humidity is 3.03.------------------------------------
+Should report "nd" errors below this line
+------------------------------------

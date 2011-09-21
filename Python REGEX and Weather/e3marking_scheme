@@ -1,0 +1,76 @@
+  There are 17 tests in the makefile. A reminder of what is
+  expected is provided in the output but it is more fully discussed here:
+
+  Note: some of the expected test results refer to number of days -
+  displaying days was not a specified requirement, so no marks
+  are deducted if accurate data points are reported instead. 
+  However, if days are reported, the accuracy of the number of 
+  days is marked.
+
+  The first 6 tests (0-5) cover incorrect commandline arguments. In each case 
+  the problem should be reported to standard error and the program should
+  stop. Each test is worth 3 marks and is marked as follows:
+    1 mark: message is useful (either explains problem or provides usage)
+    1 mark: message sent to standard error (not to standard output)
+    1 mark: program stops so we don't get any messages about averages
+  The output shows both standard error and standard output so if the student
+  incorrectly directs the messages consistently but has everything else 
+  correct, they will get 12/18 on these 6 tests.
+
+  Special Note for Test 5: This test covers the behaviour when the specified
+  start date is after the specified finish date. The correct behaviour is 
+  EITHER to report the problem to standard error and stop writing nothing
+  to standard out OR to report the fact to standard out that the date range 
+  contains no valid measurements and so no average could be calculated.  
+
+  The next 4 tests (6-9) cover the default values for arguments. Again each
+  is worth 3 points broken down as follows:
+
+   test 6:  reports duration of 908 days for 3 marks  
+            (907 or 909 would get 1 mark)
+            no marks added or deducted for temp value or reporting it is temp
+
+   test 7:  3 marks, one each for:
+               4 days duration
+               *temperature*   is measurement of interest
+               average is about 8.2
+
+   test 8:  3 marks, one each for:
+               28 days duration
+               *temperature*  is measurement of interest
+               average is about 14
+
+   test 9:  3 marks for no output from diff
+
+   The next three tests are concerned with getting the correct average when
+   the measurements come from within the same data file. They are
+   all worth 4 marks (notice the difference) and broken down as follows:
+
+
+  test 10:  2 marks for saying 7 days 
+            2 marks for average of about 14
+
+  test 11:  2 marks for saying precipitation
+            2 marks for average of about 5.5
+
+  test 12:  2 marks for saying humidity
+            2 marks for average of about 98
+
+The final 4 tests (13-16) are also worth 4 each as follows:
+
+  test 13:  2 marks for saying 51 days
+            2 marks for average of about -1
+
+  test 14:  2 marks for saying 6 days
+            2 marks for average of about 93
+
+  test 15:  1 marks for saying 12 days
+            1 marks for average of about 83
+            2 marks for warning about the 'nd' value to standard err
+
+  test 16:  2 marks for reporting that range contained no data
+            1 mark for sending this message to standard out NOT standard err
+            1 mark for not trying to calculate a value and crashing
+
+There are also some points on implementation detail and style,
+design, that may require deductions from the total.

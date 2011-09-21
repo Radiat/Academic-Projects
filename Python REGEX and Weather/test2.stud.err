@@ -1,0 +1,8 @@
+Traceback (most recent call last):
+  File "average_weather.py", line 60, in ?
+    option, single = getopt.getopt(sys.argv[1:], "s:e:thp")
+  File "/usr/local/lib/python2.4/getopt.py", line 91, in getopt
+    opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
+  File "/usr/local/lib/python2.4/getopt.py", line 195, in do_shorts
+    opt)
+getopt.GetoptError: option -s requires argument

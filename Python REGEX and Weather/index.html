@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+"http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+      <meta name="source" content="$Source: /student10/h2/05carpio/cvs/cscb07f/exercises/e3/index.html,v $"/>
+        <meta name="author" content="$Author: szamosi $"/>
+          <meta name="date" content="$Date: 2006/10/11 18:29:09 $"/>
+            <link rel="stylesheet" type="text/css" href="../../web.css"/>
+              <title>CSC207H/B07H Software Design: Exercise 3</title>
+  </head>
+  <body>
+
+    <h1>CSC207H/B07H Software Design: Exercise 3</h1>
+
+    <h2>Part 0: Learning Regular Expressions</h2>
+
+    <p>
+      There is no required software to download or install for this
+      assignment but you might want to install <a
+      href="http://weitz.de/regex-coach/">the regex-coach</a>. This
+      graphical application (for Windows or Linux) can be used 
+      to experiment with regular expressions that are needed in some 
+      of the programs below.
+    </p>
+    <p>
+      A good resource for reading about regular expressions is the
+      <a href="http://www.amk.ca/python/howto/regex/">Regular Expression
+      HOWTO</a> by A.M.Kuchling.
+    </p>
+
+    <h2>Part 1: A Regular Expression Exercise</h2>
+      <p> 
+        Here you need to write one file, "<code>regex.py</code>",
+        containing five Python classes,
+        <code>RE1</code>,
+        <code>RE2</code>,
+        <code>RE3</code>,
+        <code>RE4</code> and
+        <code>RE5</code>.
+        Each class has methods
+        <code>__init__()</code>,
+        <code>search()</code> and
+        <code>match()</code>; like the standard <code>search()</code> and
+        <code>match()</code> for regular-expression objects in
+        Python's <code>re</code> module, these ones take a 
+        single parameter -- the string being matched or searched.
+      </p>
+
+      <p>
+        Some further characteristics of these methods should become
+        clear from reading the class descriptions below, and the 
+        <code>regexTest.py</code> file in your repository.
+      </p>
+
+      <p>
+        You should use inheritance from a basic parent class to avoid
+        repetition in the <code>RE<i>i</i></code> classes, and you 
+        should also pass off all the pattern-matching work to Python's 
+        <code>re</code> module. 
+      </p>
+      <p>
+        The point of this exercise is to write five regular expressions:
+      </p>
+
+      <ol>
+          <li>
+          <code>RE1</code> accepts strings consisting of one or more
+          <code>b</code>s. The empty string is not accepted, and no characters
+          other than <code>b</code> are allowed. The point here is to use a
+          very easy regular expression to get your class structure right.
+          </li>
+
+          <li>
+          <code>RE2</code> accepts strings that are empty or comment-only
+          lines in a Python program. You might use this regular expression
+          to count the non-empty lines in your code.
+          Assume white space consists only of space characters, with no tabs.
+          </li>
+
+          <li>
+          <code>RE3</code> accepts phone numbers in the slightly old-fashioned
+          standard form, "(416) 555-1234", where the space after the area code
+          is allowed but not required. The area code (in the example, the 416)
+          and the exchange number (555) must not start with 0 or 1.
+          In the match object returned by the
+          <code>search()</code> and
+          <code>match()</code> functions, the area code, the exchange number
+          and the final four digits must all be in separate groups,
+          so that the caller can use the <code>group(i)</code> method to
+          retrieve the <code>i</code>th group.
+          </li>
+
+          <li>
+          <code>RE4</code> accepts names in the
+          form, "Funky L. Winkerbean", with any number of spaces between the
+          parts of the name.
+          The family name ("Winkerbean") may begin with "Mac" or "Mc" followed
+          by a capital letter, but the given name ("Funky") may not.
+          The given name must be at least two letters long, but the
+          family name could be just one letter.
+          The given name, initial, and family name must be returned 
+          in separate groups.
+          <em>Note:</em> As the test cases will suggest,
+          your regular expression is free to accept some surprising
+          names, and it may also reject names that in real life are
+          perfectly acceptable,
+          for example names containing apostrophes or hyphens.
+          </li>
+
+          <li>
+          <code>RE5</code> is a messy but real example.
+          The best way to start working on it is to look at the test cases,
+          because they define the format of the input lines.
+          The strings being matched are from a student data file,
+          with one line per student.
+          Each line contains data items such as
+          family name, given name, student number,
+          various registration codes, courses, etc.
+          The fields are separated mostly by tabs but sometimes by spaces.
+          The purpose of <code>RE5</code> is to
+          extract the family name, the given name and the email address.
+          They must be extractable from the match using
+          <code>group('family')</code>,
+          <code>group('given')</code> and
+          <code>group('email')</code>, respectively.
+          Please see the sample input for <code>RE5</code> in
+          <code>regexTest.py </code> for the expected format of the
+          lines.
+          Your regular expression must match the entire line, and it must
+          include each tab explicitly.
+          </li>
+
+      </ol>
+
+      <p>
+        As noted, a set of tests is provided in the file 
+        <code>regexTest.py</code>.  Read the tests carefully, because 
+        they will answer many of the questions left unanswered by the 
+        descriptions above.
+        You may well find that the tests show that your answers can be
+        less restrictive than you'd been thinking.
+      </p>
+
+    <h2>Part 2: Weather Data Averages: A Practical Python Tool </h2>
+
+    <p>
+      The Geography department at UTM publishes its
+      <a href = "http://eratos.erin.utoronto.ca/UTMMS/">meteorological station 
+      data</a> on the web.
+      You need to write a Python tool called <code>average_weather.py</code> to
+      calculate various averages from this weather data over date ranges
+      specified by the user.
+    </p>
+
+    <h3>Command-line Arguments</h3>
+    <p>
+      Your program interface must be as follows:
+      <br/>
+      <code>python average_weather.py -s date -e date -t -h -p
+outputfile</code>
+    </p>
+    <p>
+      The flags <code>-s</code> and <code>-e</code> are both options which 
+      require a date argument in the format <code>YYYY/MM/DD</code>. They
+      indicate the start and end dates for the period over which the
+      measurements should be averaged.
+      The end points are included in the period.
+      The non-parameterized options 
+      <code>t,p,</code>and <code>h</code> indicate which measurement should
+      be considered. They represent temperature, precipitation and
+      humidity respectively. The options described thus far can be specified
+      by the user in any order.  The final parameter is the name of an 
+      output file.  The default behaviour for each option
+      is: 
+      <dl>
+      <dt>start date</dt><dd>2003/11/01</dd>
+      <dt>end date</dt><dd>2006/05/31</dd>
+      <dt>if none of <code>-t</code>, <code>-p</code> or <code>-h</code> given
+      </dt><dd>average temperature</dd>
+      <dt>outputfile</dt><dd>output to standard output</dd>
+      </dl> 
+    </p>
+    <p>
+      Here are some examples of valid ways to call your program.
+      <ul>
+      <li><code>python average_weather.py</code></li>
+      <li><code>python average_weather.py -h </code></li>
+      <li><code>python average_weather.py -p precipation.out </code></li>
+      <li><code>python average_weather.py -s 2003/07/14 -h -e 2005/03/12 </code></li>
+      <li><code>python average_weather.py -w -e 2006/04/14 -s 2005/03/12 </code></li>
+      <li><code>python average_weather.py -t -s 2003/11/09 &gt; my.output</code></li>
+      </ul>
+      In the last call the output from the program is sent to
+      <em>stdout</em> and the system redirects this output to the file 
+      <code>my.output</code>
+
+    <h3>Reading files from the web</h3>
+      <p> 
+       Your program should read the data files from the web 
+       using the Python <code>urllib</code> class. You may not download 
+       the files ahead of time and then read them from a local copy.  You also
+       can't afford to read all the files every time the program runs. Instead
+       you must read only from files which might contain measurements for the
+       period in which you are interested.  When you look at the data files
+       you will discover that although the files are named by months, they
+       do not correspond directly to all measurements for the named month. 
+       They typically contain some data from the end of the previous 
+       month. For example
+       the <code>January06</code> file contains the data from December 21, 2005
+       to partway through the day on January 31, 2006.
+       Therefore, it is acceptable to read
+       one extra file for each program run.
+      </p>
+
+    <h3>The File Format</h3>
+     <p>
+       Read the files and the UTMMS web site and figure it out yourself. 
+       Don't look at files
+       earlier than <code>november03.txt</code>
+       Although the data for the previous
+       years is available on the web and looks the same in your browser, it has
+       different line endings. Take special note of the fact that for every 
+       day there are two lines for the time <code>2400</code>. The first 
+       contains the normal measurements at this time. The second line is a 
+       day summary line. It includes daily averages for temperature and 
+       humidity and the daily total for precipitation.
+     </p>
+     <p>
+       One important thing to notice is that the date is stored as the Julian
+       date. It isn't a true Julian date but instead considers 
+       January 1st of that same year to be day 1. You will find the Python 
+       <code>datetime</code> module very helpful here. 
+     </p>
+
+    <h3>Calculating Averages</h3>
+     <!--p>
+       Consider the following scenario. My daughter has a school project to
+       measure and calculate the average temperature of our yard. She begins
+       her project after school at 3 p.m. when it is quite warm outside. At
+       first she is quite keen taking 10 measurements in the first hour. She
+       writes each of these in her journal. Then between 4 and her 8 p.m. 
+       bedtime her interest wanes but she still manages to get 4 more 
+       measurements. Between 8 p.m. and 8 a.m. the next morning she takes no
+       readings and then gets one reading at 8 a.m., one at lunch and
+       one at 3 p.m. the next day. She adds up these 17 values and divides
+       by 17 to calculate the average daily temperature. You can see that
+       her result will be much too high since it was so heavily biased towards
+       the warmer after-school period. For a proper time average, the values
+       must be weighted by the length of the intervals they represent. 
+     </p-->
+
+     <p>
+       For this program, you are interested in daily averages for temperature
+       and humidity and average daily total precipitation. You can use the
+       summary <code>2400</code> line and ignore the hourly measurements.
+       Occasionally there is a missing or incorrectly formatted value. Just
+       omit that measurement from the average. 
+     </p>
+
+    <h3>Dealing with Errors </h3>
+     <p>
+       There are two sources of errors that your program must handle. 
+       When the user calls the program in an invalid way such as
+       providing an invalid date or an unknown flag, the program should
+       print a helpful message to standard error and then quit. One thing
+       to note is that we will not test your program with multiple valid
+       flags. For example,
+       we will not test <code>python average_weather -t -p -h
+        </code>. In such a situation you may choose to exit with a message
+        saying "choose only one option", you may choose to provide averages
+        for multiple fields or you may choose some other behaviour.
+     </p>
+     <p>
+       Another source of errors is the data files themselves. Some 
+       days have no valid measurements. Check out January 04, 2004.
+       Other days may have a data line but the field of interest might be
+       blank or might contain a non-numeric value such as "nd" representing
+       "no data". If the range specified by the user includes problematic
+       values then send an appropriate warning message to standard error
+       and omit these values from the calculation. Do not stop running but
+       calculate an average with the valid measurements that you do have. Do
+       not worry if it is no longer a correct time average.   Occasionally 
+       the user might specify an entire range of dates for which you have no
+       valid data. In that case your program must not crash but instead it 
+       should
+       print a helpful message to standard out explaining that an average 
+       can not be calculated with no data. 
+     </p>
+
+    <h3>Some Other Requirements</h3>
+      <p>
+        Somewhere in your solution you must make use of the following 
+        features of the Python programming language: 
+        <ol>
+         <li>
+            Use the <code>getopt</code> module.
+         </li>
+         <li>
+            Write (and then call) a method that returns multiple values. 
+         </li>
+         <li>
+         You must call a method that has optional parameters,
+         using a named argument in the call.
+         You may write a suitable method yourself,
+         or you may find
+         that the methods from the <code>datetime.timedelta</code> class
+         are helpful and can be used to fulfill this requirement. 
+         </li>
+        </ol>
+      </p>
+    <h3>Output Format</h3>
+    <p>
+      As long as a run of your program contains at least one valid 
+      data point, the output it sends to standard output should include the
+      number of valid measurements
+      included in the average, the average itself and whether it is
+      for temperature, humidity or precipitation. For example you might print
+      a message such as, "<code>There were 47 valid humidity measurements 
+      during this period.  The average humidity is 88.478631.</code>"
+      Your program's output will be read by human markers and not 
+      an automated test program, so there is no specified output
+      format to match. You also do not need to truncate or round-off the 
+      averages that you calculate.
+    </p>
+    <h2> What to hand in</h2>
+    <p>
+      Commit to your repository the two files <code>regex.py</code>
+      and <code>average_weather.py</code>. You may add test cases to
+      the corresponding test programs; the tests will not be marked.
+    </p>
+
+    <!-- p>$Id: index.html,v 1.1 2006/10/11 18:29:09 szamosi Exp $</p -->
+
+  </body>
+
+</html>

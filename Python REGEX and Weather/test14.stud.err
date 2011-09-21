@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "average_weather.py", line 171, in ?
+    fileOut.write("There were "+ str(countValid)+\
+ZeroDivisionError: float division

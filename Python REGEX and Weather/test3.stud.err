@@ -1,0 +1,4 @@
+Traceback (most recent call last):
+  File "average_weather.py", line 85, in ?
+    then = datetime.date(int(splitDate[0]), int(splitDate[1]), int(splitDate[2]))
+ValueError: month must be in 1..12

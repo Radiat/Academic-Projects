@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "average_weather.py", line 60, in ?
+    option, single = getopt.getopt(sys.argv[1:], "s:e:thp")
+  File "/usr/local/lib/python2.4/getopt.py", line 91, in getopt
+    opts, args = do_shorts(opts, args[0][1:], shortopts, args[1:])
+  File "/usr/local/lib/python2.4/getopt.py", line 191, in do_shorts
+    if short_has_arg(opt, shortopts):
+  File "/usr/local/lib/python2.4/getopt.py", line 207, in short_has_arg
+    raise GetoptError('option -%s not recognized' % opt, opt)
+getopt.GetoptError: option -b not recognized
