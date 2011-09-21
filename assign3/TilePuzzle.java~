@@ -1,0 +1,204 @@
+/** 
+ * Name: Chris Carpio
+ * login id: 05carpio
+ * Student ID: 994954518
+ */
+
+import java.util.*;
+
+/**
+ * The TilePuzzle class simulates a tile/number shifting puzzle. It contains 
+ * an array that features numbers up to (area - 1), with a blank space.
+ */
+public class TilePuzzle {
+  
+  /**
+   * An integer array for the puzzle. Represents the current pattern.
+   */
+   private int[][] grid;
+   
+   /**
+    * A variable that tracks how many rows the grid has.
+    */
+   private int rowLength = 0;
+   
+   /**
+    * A variable that tracks how many columns the grid has.
+    */
+   private int columnLength = 0;
+   
+   /**
+    * A variable that tracks how many moves the user has made.
+    */
+   private int numMoves = 0;
+  
+   /**
+    * The constructor for the program. It accepts a 2D array of integers
+    * and sets that array to be it's own. Also, it analyses the array's
+    * length in terms of rows and columns and sets it to it's own variables.
+    * @param newGrid the 2D integer array for the puzzle.
+    */
+  public TilePuzzle(int[][] newGrid) {
+    grid = newGrid;
+    rowLength = grid.length - 1;
+    columnLength = grid[0].length - 1;
+  }
+  
+  /**
+   * The moveTile method accepts an <code>int</code> that represents the
+   * numerical value of a tile. The method then looks through it's grid to 
+   * see what position that tile is at, and searches in compass directions
+   * (north, south, east, west) if there is a blank spot next to the tile.
+   * If there is, then the method swaps the blank space with the value, and
+   * returns true. It also adds one to <code>numMoves</code> if a move was
+   * successful.
+   * @param cellToMove the integer value of the tile to move.
+   * @return whether the move was completed, as a <code>boolean</code>.
+   */
+  public boolean moveTile(int cellToMove) {
+    boolean move = false;
+    int temp = 0;
+    int rowPos = 0;
+    int colPos = 0;
+    for (int i = 0; i <= rowLength; i++) {
+      for (int j = 0; j <= columnLength; j++) {
+        if (cellToMove == grid[i][j]) {
+          rowPos = i;
+          colPos = j;
+        }
+      }
+    }
+    if (-1 == grid[rowPos][Math.max(0, colPos - 1)]) {
+      move = true;
+      temp = grid[rowPos][colPos];
+      grid[rowPos][colPos] = -1;
+      grid[rowPos][Math.max(0, colPos - 1)] = temp;
+    }
+    else if (-1 == grid[rowPos][Math.min(columnLength, colPos + 1)]) {
+      move = true;
+      temp = grid[rowPos][colPos];
+      grid[rowPos][colPos] = -1;
+      grid[rowPos][Math.min(columnLength, colPos + 1)] = temp;
+    }
+    else if (-1 == grid[Math.max(0, rowPos - 1)][colPos]) {
+      move = true;
+      temp = grid[rowPos][colPos];
+      grid[rowPos][colPos] = -1;
+      grid[Math.max(0, rowPos - 1)][colPos] = temp;
+    }
+    else if (-1 == grid[Math.min(rowLength, rowPos + 1)][colPos]) {
+      move = true;
+      temp = grid[rowPos][colPos];
+      grid[rowPos][colPos] = -1;
+      grid[Math.min(rowLength, rowPos + 1)][colPos] = temp;
+    }
+    if (move) {
+      numMoves++;
+    }
+    return move;
+  }
+  
+  /**
+   * The hasWon method checks if there is a winning combination on the grid.
+   * This combination is if the array has been sorted, in sequencial order,
+   * with the blank space at the bottom right. For example, if the array
+   * was 3x3 wide, then the array must have the values from 1 to 8 in 
+   * decending order with a blank space at the end.
+   * @return if the victory conditions have been met, as a <code>boolean</code>.
+   */
+  public boolean hasWon() {
+    boolean win = true;
+    int count = 1;
+    for (int i = 0; i <= rowLength; i++) {
+      for (int j = 0; j <= columnLength; j++) {
+        if (count != grid[i][j] && -1 != grid[i][j]) {
+          win = false;
+        }
+        count++;
+      }
+    }
+  return win;
+  }
+  
+  /**
+   * A getter method that returns the number of moves the user has made so far.
+   * @return the total number moves made as an <code>int</code>.
+   */
+  public int numTileMoves() {
+    return numMoves;
+  }
+  
+  /**
+   * It searches and returns the greatest numerical value that is on 
+   * the tiles/array. 
+   * @return the greatest value of the tiles/array, as an <code>int</code>.
+   */
+  public int maxTileValue() {
+    int greatestVal = 0;
+     for (int i = 0; i <= rowLength; i++) {
+      for (int j = 0; j <= columnLength; j++) {
+        greatestVal = Math.max(greatestVal, grid[i][j]);
+        }
+      } 
+     return greatestVal;
+  }
+  
+  /**
+   * A method that simply returns the address of the array that the <code>
+   * TilePuzzle</code> object is using, permitting further use of that array.
+   * @return the address of the grid in use.
+   */
+  public int[][] getGrid() {
+    return grid;
+  }
+  
+  /**
+   * A method that tests if two grids in two <code>TilePuzzle</code>'s are the
+   * same. It will return false if either the dimensions of the grids are 
+   * different, and also if the elements inside the grid are not the same.
+   * It will return true if equal.
+   * @param puzzle a <code>TilePuzzle</code> object.
+   * @return whether if the current and given <code>TilePuzzle</code> object
+   * grids are similar, as a <code>boolean</code>.
+   */
+  public boolean equals(TilePuzzle puzzle) {
+    int[][] otherGrid = puzzle.getGrid();
+    boolean isEquals = rowLength == (otherGrid.length - 1) 
+         && columnLength == (otherGrid[0].length - 1);
+    if (isEquals) {
+      for (int i = 0; i <= rowLength; i++) {
+      for (int j = 0; j <= columnLength; j++) {
+        if (grid[i][j] != otherGrid[i][j]) {
+          isEquals = false;
+          }
+        }
+      }
+    }
+    return isEquals;
+  }
+   
+  /**
+   * This method returns the layout of the grid in <code>String</code> format.
+   * It breaks differnt lines with the<i>\n</i> characters, and also replaces
+   * the blank space, represented as a <i>-1</i> to a <i>*</i>.
+   * @return the format of the grid, as a <code>String</code>.
+   */
+  public String toString() {
+    String output = "";
+    for (int i = 0; i <= rowLength; i++) {
+      for (int j = 0; j <= columnLength; j++) {
+        if (grid[i][j] == -1) {
+          output = output + "* ";
+        }
+        else {
+        output = output + grid[i][j] + " ";
+        }
+      }
+      output = output.trim() + "\n";
+    }
+    output = output.substring(0, output.length() - 1);
+    return output;
+  }
+
+}
+    
